@@ -1,0 +1,12 @@
+com.example.elden_kirala.app-core-1.6.0-0 C:\Users\dondu\.gradle\caches\transforms-3\48012f7b8c4234b33c7558e0f466ee8f\transformed\core-1.6.0\res
+com.example.elden_kirala.app-jetified-annotation-experimental-1.1.0-1 C:\Users\dondu\.gradle\caches\transforms-3\675d4f8b82be03b66a2499ef69f77467\transformed\jetified-annotation-experimental-1.1.0\res
+com.example.elden_kirala.app-jetified-window-1.0.0-beta04-2 C:\Users\dondu\.gradle\caches\transforms-3\b80677c91f94664183fd6ffc76219b18\transformed\jetified-window-1.0.0-beta04\res
+com.example.elden_kirala.app-jetified-window-java-1.0.0-beta04-3 C:\Users\dondu\.gradle\caches\transforms-3\d700e38361e6d99fd41a4e4815c44d9e\transformed\jetified-window-java-1.0.0-beta04\res
+com.example.elden_kirala.app-debug-4 D:\ornekler\elden_kirala\android\app\src\debug\res
+com.example.elden_kirala.app-main-5 D:\ornekler\elden_kirala\android\app\src\main\res
+com.example.elden_kirala.app-pngs-6 D:\ornekler\elden_kirala\build\app\generated\res\pngs\debug
+com.example.elden_kirala.app-resValues-7 D:\ornekler\elden_kirala\build\app\generated\res\resValues\debug
+com.example.elden_kirala.app-rs-8 D:\ornekler\elden_kirala\build\app\generated\res\rs\debug
+com.example.elden_kirala.app-mergeDebugResources-9 D:\ornekler\elden_kirala\build\app\intermediates\incremental\debug\mergeDebugResources\merged.dir
+com.example.elden_kirala.app-mergeDebugResources-10 D:\ornekler\elden_kirala\build\app\intermediates\incremental\debug\mergeDebugResources\stripped.dir
+com.example.elden_kirala.app-merged_res-11 D:\ornekler\elden_kirala\build\app\intermediates\merged_res\debug
