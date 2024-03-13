@@ -1,26 +1,31 @@
-import 'dart:convert';
-import 'package:elden_kirala/models/product-model/product-model.dart';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
-class FetchDataFromJson {
-  final String url = "http://192.168.0.16:8081/api/v2/Product/get-all/12";
+class Fetcher {
+  final String apiUrl;
+  final Function(Map<String, dynamic>) fromJsonFunction;
+  final Function(List<dynamic>) setData;
 
-  Future<List<ProductModel>> getProduct() async {
-    var response = await http.get(Uri.parse(url));
-    if (response.statusCode == 200) {
-      dynamic responseBody = json.decode(response.body);
-      if (responseBody.containsKey('data')) {
-        List<dynamic> dataList = responseBody['data'];
-        List<ProductModel> products = dataList
-            .map((dynamic item) => ProductModel.fromJson(item))
-            .toList();
-        return products;
-      } else {
-        throw Exception("Response body does not contain 'data' key");
+  Fetcher(this.apiUrl, this.fromJsonFunction, this.setData);
+
+  Future<void> fetchData() async {
+    Dio dio = Dio();
+    try {
+      Response response = await dio.get(apiUrl);
+      print(response.data);
+      if (response.statusCode == 200) {
+        dynamic responseData = response.data['data'];
+        if (responseData != null) {
+          if (responseData is Map<String, dynamic>) {
+            // Tek bir veri döndü
+            setData([fromJsonFunction(responseData)]);
+          } else if (responseData is List<dynamic>) {
+            // Birden fazla veri döndü
+            setData(responseData.map((data) => fromJsonFunction(data)).toList());
+          }
+        }
       }
-    } else {
-      throw Exception("Failed to load products");
+    } catch (e) {
+      print("Error: $e");
     }
   }
 }
-

@@ -1,59 +1,63 @@
-import 'package:elden_kirala/services/fetch-data.dart';
+import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import '../../models/product-model/product-model.dart';
+import '../../services/api/api.dart';
+import '../../services/fetch-data.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  const Home({Key? key}) : super(key: key);
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  late Future<List<ProductModel>> futureProducts;
+  List<Product> products = [];
+  late Fetcher productFetcher;
 
   @override
   void initState() {
     super.initState();
-    futureProducts = FetchDataFromJson().getProduct();
-    futureProducts.then((value) {
-      setState(() {}); // Trigger a rebuild once the future completes
-    }).catchError((error) {
-      print("Error fetching products: $error");
+    productFetcher = Fetcher(
+      "http://192.168.0.16:8081/api/v2/Product/get-all/12",
+      Product.fromJson,
+      _setProducts,
+    );
+
+    productFetcher.fetchData();
+  }
+  void _setProducts(List<dynamic> data) {
+    setState(() {
+      products = data.cast<Product>(); // Product tipine dönüştürme
     });
   }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Product List'),
+      body: products.isEmpty
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(products[index].name.toString()),
+            subtitle: Text(products[index].description.toString()),
+            trailing: Text('\$${products[index].price.toString()}'),
+          );
+        },
       ),
-      body: Center(
-        child: FutureBuilder<List<ProductModel>>(
-          future: futureProducts,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const CircularProgressIndicator();
-            } else if (snapshot.hasError) {
-              return Text("Error: ${snapshot.error}");
-            } else if (snapshot.hasData) {
-              return ListView.builder(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(snapshot.data![index].name ?? ''),
-                  );
-                },
-              );
-            } else {
-              return const Text("No data available");
-            }
-          },
-        ),
-      ),
+
+
+
+
+
+
     );
   }
 }
-
-
