@@ -1,25 +1,24 @@
 import 'package:dio/dio.dart';
 
 class Fetcher {
-  final String apiUrl;
   final Function(Map<String, dynamic>) fromJsonFunction;
+  final Future<Response<dynamic>> Function() APIEndpoint;
   final Function(List<dynamic>) setData;
 
-  Fetcher(this.apiUrl, this.fromJsonFunction, this.setData);
+  Fetcher(this.fromJsonFunction, this.setData, this.APIEndpoint);
 
   Future<void> fetchData() async {
-    Dio dio = Dio();
     try {
-      Response response = await dio.get(apiUrl);
+      Response response = await APIEndpoint(); // Await the function call here
       print(response.data);
       if (response.statusCode == 200) {
         dynamic responseData = response.data['data'];
         if (responseData != null) {
           if (responseData is Map<String, dynamic>) {
-            // Tek bir veri döndü
+            // Single data returned
             setData([fromJsonFunction(responseData)]);
           } else if (responseData is List<dynamic>) {
-            // Birden fazla veri döndü
+            // Multiple data returned
             setData(responseData.map((data) => fromJsonFunction(data)).toList());
           }
         }
@@ -29,3 +28,6 @@ class Fetcher {
     }
   }
 }
+
+
+

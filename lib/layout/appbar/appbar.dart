@@ -5,138 +5,159 @@ import 'package:get/get.dart';
 import '../../constanst/fontSize.dart';
 import '../../constanst/texts.dart';
 import '../../constanst/colors.dart';
+import '../../controller/auth-controller/auth-controller.dart';
 
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget  {
   const CustomAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        height: 100,
-        child: AppBar(
-          forceMaterialTransparency: true,
-          title: const Row(
+    return AppBar(
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: CircleAvatar(
+              backgroundImage: AssetImage('assets/profile_image.jpg'),
+            ),
+          ),
+           Column(
             children: [
-              Padding(
-                padding: EdgeInsets.all(8.0),
-                child: CircleAvatar(
-                  backgroundImage: AssetImage('assets/profile_image.jpg'),
+              Opacity(
+                opacity: 0.6,
+                child: Text(
+                  MyTexts.appBarTitle,
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontSize: MyFontSizes.fontSize_1(context),
+                  ),
                 ),
               ),
-               Column(
-                children: [
-                  Opacity(
-                    opacity: 0.6,
-                    child: Text(
-                      MyTexts.appBarTitle,
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        fontSize: MyFontSizes.fontSize,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    MyTexts.appBarUserTitle,
-                    textAlign: TextAlign.start,
-                    style: TextStyle(
-                      fontSize: MyFontSizes.fontSize*1.3,
-                    ),
-                  )
-                ],
-                             ),
+              Text(
+                MyTexts.appBarUserTitle,
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: MyFontSizes.fontSize_1(context),
+                ),
+              )
             ],
-          ),
-          backgroundColor: MyColors.background,
-          /*leading:IconButton(
-            icon: Image.asset('assets/logo.png',width: 25, height: 25,),
+                         ),
+        ],
+      ),
+      backgroundColor: MyColors.background,
+      actions: <Widget>[
+        IconButton(
+          icon: const Icon(MyIcons.notificationIcon),
+          onPressed: () {
+            // Diğer işlevler burada gerçekleştirilebilir.
+          },
+        ),
+        /*Container(
+          margin: const EdgeInsets.all(8.0),
+          child: IconButton(
+            icon: Image.asset('assets/logo.png',width: 25, height: 25),
             onPressed: () {
               Get.toNamed("/");
             },
-          ),*/
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(MyIcons.notificationIcon),
-              onPressed: () {
-                // Diğer işlevler burada gerçekleştirilebilir.
-              },
-            ),
-            Container(
-              margin: EdgeInsets.all(8.0),
-              child: IconButton(
-                icon: Image.asset('assets/logo.png',width: 25, height: 25),
-                onPressed: () {
-                  Get.toNamed("/");
-                },
-              ),
-            ),
+          ),
+        ),*/
+         PopupMenu(),
 
 
-          ],
+      ],
 
-        ),
-      ),
     );
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(100);
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+
+
 }
 
 class CustomAppBarInPage extends StatelessWidget implements PreferredSizeWidget {
+
   final String? title;
   const CustomAppBarInPage({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text("${title}"),
+      title: Text("$title"),
       centerTitle: true,
       backgroundColor: MyColors.background,
       leading:IconButton(
-        icon: Icon(MyIcons.backIcon),
+        icon: const Icon(MyIcons.backIcon),
         onPressed: () {
           Get.back();
         },
       ),
-      actions: <Widget>[
-        PopupMenuButton(
-          position: PopupMenuPosition.under,
-          color: Colors.white,
-          useRootNavigator: true,
-          itemBuilder: (BuildContext context) {
-            return <PopupMenuEntry>[
-              const PopupMenuItem(
-                value: 'account',
-                child: Text('Hesabım'),
-              ),
-              const PopupMenuItem(
-                value: 'notification',
-                child: Text('Bildirim Tercihlerim'),
-              ),
-              const PopupMenuItem(
-                value: 'security',
-                child: Text('Güvenlik'),
-              ),
-              const PopupMenuItem(
-                value: 'addresses',
-                child: Text('Adreslerim'),
-              ),
-              const PopupMenuItem(
-                value: 'all-rent',
-                child: Text('Tüm Kiralamalar'),
-              ),
-            ];
-          },
-          onSelected: (value) {
-            Get.toNamed('/${value}');
-          },
-        ),
+      actions:  <Widget>[
+        PopupMenu(),
       ],
     );
   }
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
+
+}
+
+class CustomAppBarLogout extends StatelessWidget implements PreferredSizeWidget {
+
+  final String? title;
+  const CustomAppBarLogout({super.key, required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppBar(
+      title: Text("$title"),
+      centerTitle: true,
+      backgroundColor: MyColors.secondary,
+
+    );
+  }
+
+  @override
+  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+}
+
+class PopupMenu extends StatelessWidget {
+  PopupMenu({super.key,});
+
+  final AuthController _authController = Get.find(); // authController
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton(
+      position: PopupMenuPosition.under,
+      color: Colors.white,
+      useRootNavigator: true,
+      itemBuilder: (BuildContext context) {
+        return <PopupMenuEntry>[
+          const PopupMenuItem(
+            value: 'security',
+            child: Text('Güvenlik'),
+          ),
+          const PopupMenuItem(
+            value: 'addresses',
+            child: Text('Adreslerim'),
+          ),
+          const PopupMenuItem(
+            value: 'all-rent',
+            child: Text('Tüm Kiralamalar'),
+          ),
+           PopupMenuItem(
+            child: _authController.isAuthenticated.value?const Text('Çıkış Yap'):const Text('Giriş Yap'),
+            onTap: ()=>_authController.isAuthenticated.value?_authController.logout():_authController.login(),
+          ),
+        ];
+      },
+      onSelected: (value) {
+        Get.toNamed('/$value');
+      },
+    );
+  }
 }

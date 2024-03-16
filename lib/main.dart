@@ -11,9 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:elden_kirala/routes/route.dart';
 import 'package:get/get.dart';
 import 'constanst/icons.dart';
+import 'controller/auth-controller/auth-controller.dart';
 import 'layout/appbar/appbar.dart';
 
 void main() {
+  Get.put(AuthController());
   runApp(const MyApp());
 }
 
@@ -30,6 +32,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
+      debugShowMaterialGrid: false,
       theme: ThemeData(
         useMaterial3: true,
         fontFamily: MyFontFamilies.fontFamily,
@@ -47,6 +50,7 @@ class MyAppMain extends StatefulWidget {
 }
 
 class _MyAppMainState extends State<MyAppMain> {
+  final AuthController _authController = Get.find(); // authController
   int _currentIndex = 0;
   final List _screens = [const Home(),const Message(),const Favorites(),const Account()];
   @override
@@ -54,7 +58,7 @@ class _MyAppMainState extends State<MyAppMain> {
     return  Scaffold(
       backgroundColor: MyColors.background,
       appBar: const CustomAppBar(),
-      extendBodyBehindAppBar: true,
+      extendBodyBehindAppBar: false,
       body: _screens[_currentIndex],
       floatingActionButton: const FloatingActionButton(
           onPressed: add,
@@ -64,48 +68,52 @@ class _MyAppMainState extends State<MyAppMain> {
             onPressed: null,
           ),),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
-      bottomNavigationBar: BottomNavyBar(
-          selectedIndex: _currentIndex,
-          showElevation: true,
-          itemCornerRadius: 24,
-          curve: Curves.easeIn,
-          onItemSelected: (index) => setState(() => _currentIndex = index),
-          containerHeight:MediaQuery.of(context).size.height*0.1,
-
-          items: <BottomNavyBarItem>[
-            BottomNavyBarItem(
-              icon: const Icon(MyIcons.home),
-              title: const Text(MyTexts.home),
-              activeColor: MyColors.primary,
-              inactiveColor: MyColors.tertiary,
-              textAlign: TextAlign.center,
-            ),
-            BottomNavyBarItem(
-              icon: const Icon(MyIcons.messageIcon),
-              title: const Text(MyTexts.messages),
-              activeColor: MyColors.primary,
-              inactiveColor: MyColors.tertiary,
-              textAlign: TextAlign.center,
-            ),
-            BottomNavyBarItem(
-              icon: const Icon(MyIcons.favoriteIcon),
-              title: const Text(MyTexts.favorites),
-              activeColor: MyColors.primary,
-              inactiveColor: MyColors.tertiary,
-              textAlign: TextAlign.center,
-            ),
-            BottomNavyBarItem(
-              icon: const Icon(MyIcons.accountIcon),
-              title: const Text(MyTexts.account),
-              activeColor: MyColors.primary,
-              inactiveColor: MyColors.tertiary,
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
+      bottomNavigationBar: buildBottomNavyBar(context),
 
 
     );
+  }
+
+  BottomNavyBar buildBottomNavyBar(BuildContext context) {
+    return BottomNavyBar(
+        selectedIndex: _currentIndex,
+        showElevation: true,
+        itemCornerRadius: 24,
+        curve: Curves.easeIn,
+        onItemSelected: (index) => setState(() => _currentIndex = index),
+        containerHeight:MediaQuery.of(context).size.height*0.1,
+
+        items: <BottomNavyBarItem>[
+          BottomNavyBarItem(
+            icon: const Icon(MyIcons.home),
+            title: const Text(MyTexts.home),
+            activeColor: MyColors.primary,
+            inactiveColor: MyColors.tertiary,
+            textAlign: TextAlign.center,
+          ),
+          BottomNavyBarItem(
+            icon: const Icon(MyIcons.messageIcon),
+            title: const Text(MyTexts.messages),
+            activeColor: MyColors.primary,
+            inactiveColor: MyColors.tertiary,
+            textAlign: TextAlign.center,
+          ),
+          BottomNavyBarItem(
+            icon: const Icon(MyIcons.favoriteIcon),
+            title: const Text(MyTexts.favorites),
+            activeColor: MyColors.primary,
+            inactiveColor: MyColors.tertiary,
+            textAlign: TextAlign.center,
+          ),
+          BottomNavyBarItem(
+            icon: const Icon(MyIcons.accountIcon),
+            title: const Text(MyTexts.account),
+            activeColor: MyColors.primary,
+            inactiveColor: MyColors.tertiary,
+            textAlign: TextAlign.center,
+          ),
+        ],
+      );
   }
 }
 

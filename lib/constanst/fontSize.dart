@@ -1,3 +1,10 @@
+import 'package:flutter/material.dart';
+
 class MyFontSizes {
-  static const double fontSize=12;
+  static fontSize_0(BuildContext context) => MediaQuery.of(context).size.width*0.03.toDouble();
+  static fontSize_1(BuildContext context) => MediaQuery.of(context).size.width*0.04.toDouble();
+  static fontSize_2(BuildContext context) => MediaQuery.of(context).size.width*0.05.toDouble();
+  static fontSize_3(BuildContext context) => MediaQuery.of(context).size.width*0.06.toDouble();
+
+
 }

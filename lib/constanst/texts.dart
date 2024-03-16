@@ -10,6 +10,8 @@ class MyTexts{
   static const String details="Details";
   static const String favorites="Favorilerim";
   static const String messages="Mesajlarım";
+  static const String name="Eldenkirala.com";
+
 
 
 

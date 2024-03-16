@@ -12,7 +12,6 @@ class _HesabimState extends State<Account> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //appBar: CustomAppBar(),
       body:Center(
         child: Text("accouuunt")
       )
