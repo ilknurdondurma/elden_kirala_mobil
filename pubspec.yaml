@@ -39,6 +39,7 @@ dependencies:
   bottom_navy_bar: ^6.0.0
   http: ^1.2.1
   dio: ^5.4.1
+  flutter_carousel_slider: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -78,15 +79,16 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+  fonts:
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
+    - family: MyFontFamily
+      fonts:
+        - asset: assets/fonts/Sarina-Regular.ttf
+          weight: 100
   #       - asset: fonts/TrajanPro_Bold.ttf
   #         weight: 700
   #

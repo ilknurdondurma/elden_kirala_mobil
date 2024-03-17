@@ -31,10 +31,10 @@ class Api {
 
 
   static const String getCategories = '$baseUrl/Category/get-categories';
-
-  static const String getAllBrand = '$baseUrl/Brand/get-all';
+*/
+  static getAllBrand() => dio.get('$baseUrl/Brand/get-all');
   static const String getBrandByCategory = '$baseUrl/Brand/get/:cid';
-
+/*
   static const String getCommentById = '$baseUrl/Comment/get/:pid';
 
   static const String getFavoritesByUserId = '$baseUrl/Product/get-favori/:uid';

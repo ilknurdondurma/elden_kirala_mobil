@@ -14,7 +14,7 @@ class ProductContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: MyContainerSizes.heightSize(context, 0.25),
+      height: MyContainerSizes.heightSize(context, 0.35),
       width: MyContainerSizes.widthSize(context, 0.30),
       decoration: BoxDecoration(
         border: Border.all(width: 1, color: MyColors.tertiary),
