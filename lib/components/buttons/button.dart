@@ -114,7 +114,7 @@ double _getTextSize(String size) {
     case 'small':
       return 18.0;
     case 'xsmall':
-      return 16.0;
+      return 14.0;
     default:
       return 20.0;
   }
@@ -128,7 +128,7 @@ double _getSize(String size) {
     case 'small':
       return 8.0;
     case 'xsmall':
-      return 6.0;
+      return 0.0;
     default:
       return 10.0;
   }

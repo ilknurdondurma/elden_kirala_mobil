@@ -1,14 +1,22 @@
+import 'package:elden_kirala/components/buttons/button.dart';
+import 'package:elden_kirala/components/carousel/normal/normal.dart';
+import 'package:elden_kirala/components/text/text.dart';
+import 'package:elden_kirala/constanst/containerSizes.dart';
+import 'package:elden_kirala/constanst/fontSize.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../api/api.dart';
-import '../../components/carousel/circular/circular-carousel.dart';
-import '../../components/productCard/productCard.dart';
+import '../../components/carousel/circular/carousel.dart';
+import '../../components/gridView/gridView.dart';
+import '../../components/highlightCard/highlightCard.dart';
 import '../../constanst/colors.dart';
 import '../../models/brand-model/brand-model.dart';
 import '../../models/product-model/product-model.dart';
-import '../../services/product_fetcher.dart';
+import '../../models/category-model/category-model.dart';
+import '../../services/fetcher.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
@@ -17,28 +25,22 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   List<Product> products = [];
   List<Brand> brands = [];
-  late Fetcher productFetcherProducts;
-  late Fetcher productFetcherBrands;
+  List<Categories>categories=[];
+  late Fetcher productFetcher;
+  late Fetcher brandFetcher;
+  late Fetcher categoryFetcher;
 
   @override
   void initState() {
     super.initState();
 
-    // Products fetcher
-    productFetcherProducts = Fetcher(
-      Product.fromJson,
-      _setProducts,
-          () => Api.getAllProducts(12),
-    );
-    productFetcherProducts.fetchData();
+    productFetcher = Fetcher(Product.fromJson, _setProducts, () => Api.getAllProducts(12));
+    brandFetcher = Fetcher(Brand.fromJson, _setBrands, () => Api.getAllBrand());
+    categoryFetcher = Fetcher(Categories.fromJson, _setCategories, () => Api.getCategories());
 
-    // Brands fetcher
-    productFetcherBrands = Fetcher(
-      Brand.fromJson,
-      _setBrands,
-          () => Api.getAllBrand(),
-    );
-    productFetcherBrands.fetchData();
+    productFetcher.fetchData();
+    brandFetcher.fetchData();
+    categoryFetcher.fetchData();
   }
 
   void _setProducts(List<dynamic> data) {
@@ -53,71 +55,78 @@ class _HomeState extends State<Home> {
     });
   }
 
+  void _setCategories(List<dynamic> data) {
+    setState(() {
+      categories = data.cast<Categories>(); // CATEGORY tipine dönüştürme
+    });
+  }
+  final TextEditingController _searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: brands.map((brand) => Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ClipOval(
-                    child: Container(
-
-                      width: 62, // Ayarlayın
-                      height: 62, // Ayarlayın
-                      child: Center(
-                        child: FractionallySizedBox(
-                          widthFactor: 0.8,
-                          heightFactor: 0.5,
-                          child: Image.network(brand.logo.toString(),
-                            fit: BoxFit.contain,
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: MyContainerSizes.heightSize(context, 0.05), // TextField'ın yüksekliğini ayarlar
+                child: Row(
+                  children: [
+                    Button(
+                      onPressed: ()=>null,
+                      label: "Tüm Kategoriler",
+                      variant: "PurpleOutline",
+                      size: "xsmall",
+                    ),
+                    SizedBox(width: 10,),
+                    Expanded( // TextField widget'ını esnek genişlikli (expanded) yapar
+                      child: Container(
+                        child: TextField(
+                          controller: _searchController,
+                          onChanged: null,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 12), // İçeriğin etrafındaki boşluğu ayarlar
+                            hintText: 'Aramak istediğiniz şeyi girin...',
+                            prefixIcon: Icon(Icons.search),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                )).toList(),
+                  ],
+                ),
               ),
             ),
+            Carousel(items: categories,),
+
+
+
+
+
+            MyText(text: "Markaları Keşfet") ,
+        //markalar
+            CircularCarousel(items: brands),
+             MyText(text: "Vitrini Keşfet",fontSize: MyFontSizes.fontSize_3(context),) ,
+        // vitrin
+            HighlightCard(imagePath: "assets/vitrin.jpeg"),
+            MyText(text: "Tüm Ürünleri Keşfet") ,
             //ürünler
             products.isEmpty
-                ? const Center(child: Text("Ürün bulunamadı..."))
-                : buildGridView(context),
+                ? const Center(child: MyText(text:"Ürün bulunamadı..."))
+                : CustomGridView(
+                    products: products,
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget buildGridView(BuildContext context) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: _crossAxisCount(context),
-        crossAxisSpacing: 20.0,
-        mainAxisSpacing: 30.0,
-      ),
-      itemCount: products.length,
-      itemBuilder: (context, index) {
-        return ProductContainer(product: products[index]);
-      },
-    );
-  }
 
-  int _crossAxisCount(BuildContext context) {
-    // Calculate the number of items per row based on screen width
-    final screenWidth = MediaQuery.of(context).size.width;
-    if (screenWidth > 1200) {
-      return 4;
-    } else if (screenWidth > 800) {
-      return 3;
-    } else {
-      return 2;
-    }
-  }
 }
+
+

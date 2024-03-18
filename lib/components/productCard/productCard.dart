@@ -5,6 +5,7 @@ import '../../constanst/colors.dart';
 import '../../constanst/containerSizes.dart';
 import '../../constanst/fontSize.dart';
 import '../../models/product-model/product-model.dart';
+import '../text/text.dart';
 
 class ProductContainer extends StatelessWidget {
   final Product product;
@@ -35,10 +36,10 @@ class ProductContainer extends StatelessWidget {
               ),
               Text(product.name.toString(),
                 style: TextStyle(
-                    fontWeight: FontWeight.normal,
                     fontSize: MyFontSizes.fontSize_1(context)),
                 maxLines: 1,
                 textAlign: TextAlign.center,),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

@@ -29,9 +29,9 @@ class Api {
   static const String signUp = '$baseUrl/User/sign-up';
   static const String updateUser = '$baseUrl/User/update/:id';
 
-
-  static const String getCategories = '$baseUrl/Category/get-categories';
 */
+  static getCategories() => dio.get('$baseUrl/Category/get-categories');
+
   static getAllBrand() => dio.get('$baseUrl/Brand/get-all');
   static const String getBrandByCategory = '$baseUrl/Brand/get/:cid';
 /*
