@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:elden_kirala/constanst/colors.dart';
 import 'package:elden_kirala/constanst/containerSizes.dart';
 import 'package:elden_kirala/constanst/fontSize.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
@@ -19,7 +21,7 @@ final box = GetStorage();
 class Details extends StatefulWidget {
   final int? id;
 
-  const Details({super.key, this.id});
+  const Details({Key? key, this.id}) : super(key: key);
 
   @override
   State<Details> createState() => _DetailsState();
@@ -79,12 +81,13 @@ class _DetailsState extends State<Details> {
               size: 20,
             ),)
           : product.isEmpty // Ürün bulunamadı
-          ? const Center(child: MyText(text: "Ürün bulunamadı"),)
+          ? Center(child: MyText(text: "Ürün bulunamadı"),)
           :SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
+              //resim
                   Container(
                     height: MyContainerSizes.heightSize(context, 0.5),
                     width: MyContainerSizes.widthSize(context, 1),
@@ -96,14 +99,14 @@ class _DetailsState extends State<Details> {
                             children: [
                               Expanded(
                                 child: FractionallySizedBox(
-                                      widthFactor: 0.95,
+                                      widthFactor: 0.9,
                                         heightFactor: 1.0,
-                                        child: SizedBox(
+                                        child: Container(
                                           width: MediaQuery.of(context).size.width * 0.5, // Set the width to half of the screen width
                                           child: Column(
                                             children: [
-                                              const Padding(
-                                                padding: EdgeInsets.all(8.0),
+                                              Padding(
+                                                padding: const EdgeInsets.all(8.0),
                                                 child: Row(
                                                   mainAxisAlignment: MainAxisAlignment.end,
                                                   children: [
@@ -148,6 +151,7 @@ class _DetailsState extends State<Details> {
                          ],
                     ),
                   ),
+              //kategori
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
@@ -165,6 +169,7 @@ class _DetailsState extends State<Details> {
                       ],
                     ),
                   ),
+              //name
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
@@ -182,6 +187,60 @@ class _DetailsState extends State<Details> {
                       ],
                     ),
                   ),
+              //yıldızz
+                  Row(
+                    children: [
+                      _buildRatingStars(product.first.rating!.toDouble()),
+                      SizedBox(width: 20,),
+                      GestureDetector(
+                        child: Text(
+                          '${product.first.commentCount} değerlendirme',
+                          style: TextStyle(
+                            fontSize: MyFontSizes.fontSize_1(context),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+              //satıcı
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                       border: Border.all(width: 1, color: MyColors.tertiary),
+                    ),
+                      child: Padding(
+                        padding:  EdgeInsets.symmetric(vertical: 8 , horizontal: 20 ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "${product.first.userName} ${product.first.userSurname}",
+                              style: TextStyle(
+                                fontSize: MyFontSizes.fontSize_2(context),
+                                color: Colors.black54,
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Icon(Icons.location_on),
+                                Text(
+                                  "${product.first.userCity}",
+                                  style: TextStyle(
+                                    fontSize: MyFontSizes.fontSize_2(context),
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+
+              //descrition
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
@@ -199,6 +258,7 @@ class _DetailsState extends State<Details> {
                       ],
                     ),
                   ),
+              //durumuu
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
@@ -206,7 +266,7 @@ class _DetailsState extends State<Details> {
                       children: [
                         Row(
                           children: [
-                            const Text("Ürün Durumu : ",style: TextStyle(fontWeight: FontWeight.bold),),
+                            Text("Ürün Durumu : ",style: TextStyle(fontWeight: FontWeight.bold),),
                             Button(
                               label: '${product.first.status}',
                               onPressed: () {  },
@@ -217,7 +277,7 @@ class _DetailsState extends State<Details> {
                         ),
                         Row(
                           children: [
-                            const Text("Min Kiralama : ",style: TextStyle(fontWeight: FontWeight.bold),),
+                            Text("Min Kiralama : ",style: TextStyle(fontWeight: FontWeight.bold),),
                             Button(
                               label: ' ${product.first.minRentalPeriod}  Ay',
                               onPressed: () {  },
@@ -228,7 +288,7 @@ class _DetailsState extends State<Details> {
                         ),
                         Row(
                           children: [
-                            const Text("Max Kiralama : ",style: TextStyle(fontWeight: FontWeight.bold),),
+                            Text("Max Kiralama : ",style: TextStyle(fontWeight: FontWeight.bold),),
                             Button(
                               label: '${product.first.maxRentalPeriod}  Ay ',
                               onPressed: () {  },
@@ -247,53 +307,76 @@ class _DetailsState extends State<Details> {
                     ),
                   ),
           ),
-        bottomNavigationBar: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            return Container(
-              decoration: const BoxDecoration(
-                border: Border.symmetric(
-                  vertical: BorderSide.none,
-                  horizontal: BorderSide(width: 1, color: MyColors.tertiary),
-                ),
-              ),
-              height: constraints.maxHeight, // Use maxHeight to ensure the container takes up available height
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          "Ürün Fiyatı : ",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          "${product.first.price} TL/ay",
-                          style: TextStyle(
-                            fontSize: MyFontSizes.fontSize_1(context),
-                            color: Colors.black54,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Button(
-                      label: 'Satıcıya Sor',
-                      onPressed: () {},
-                      size: constraints.maxWidth < 600 ? 'xsmall' : 'small', // Adjust button size based on screen width
-                      variant: 'PurpleOutline',
-                    ),
-                  )
-                ],
-              ),
-            );
-          },
-        )
+        bottomNavigationBar: buildBottomBar(context)
 
     );
   }
+
+  Container buildBottomBar(BuildContext context) {
+    return Container(
+        decoration: BoxDecoration(
+          border: Border.symmetric(vertical:BorderSide.none,horizontal: BorderSide(width: 1,color: MyColors.tertiary)),
+          //color: MyColors.secondary
+        ),
+        height: MediaQuery.of(context).size.height*0.1,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Ürün Fiyatı : ",style: TextStyle(fontWeight: FontWeight.bold),),
+                  Text(
+                    "${product.first.price} TL/ay",
+                    style: TextStyle(
+                      fontSize: MyFontSizes.fontSize_1(context),
+                      color: Colors.black54,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  Button(
+                    label: 'Satıcıya Sor',
+                    onPressed: () {  },
+                    size: 'small',
+                    variant: 'PurpleOutline',
+                  ),
+
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+  }
+}
+Widget _buildRatingStars(double rating) {
+  // Calculate the number of filled stars
+  int filledStars = rating.round();
+
+  // Calculate the number of empty stars
+  int emptyStars = 5 - filledStars;
+
+  // List to hold the star icons
+  List<Widget> starIcons = [];
+
+  // Add filled stars
+  for (int i = 0; i < filledStars; i++) {
+    starIcons.add(Icon(Icons.star, color: Colors.yellow,size: 20,));
+  }
+
+  // Add empty stars
+  for (int i = 0; i < emptyStars; i++) {
+    starIcons.add(Icon(Icons.star_border, color: Colors.grey,size: 20,));
+  }
+
+  // Return a row containing the star icons
+  return Row(children: starIcons);
 }
