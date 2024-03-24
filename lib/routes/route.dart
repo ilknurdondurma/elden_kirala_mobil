@@ -10,6 +10,7 @@ import 'package:elden_kirala/pages/settings/security/security.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
+import 'package:get_storage/get_storage.dart';
 import '../controller/auth-controller/auth-controller.dart';
 import '../main.dart';
 import '../pages/settings/account/account.dart';
@@ -18,8 +19,8 @@ class RouteManager {
   static final AuthController _authController = Get.find(); // authController
 
   static final List<GetPage> routes = [
-    GetPage(name: '/', page: () =>_authController.isAuthenticated.value ? MyAppMain() : LoginPage()),
-    GetPage(name: '/detail', page: () => Details()),
+    GetPage(name: '/', page: () =>MyAppMain()),
+    GetPage(name: '/detail/:id', page: () => Details()),
     GetPage(name: '/favorites', page: () => Favorites()),
     GetPage(name: '/account', page: () => Account()),
     GetPage(name: '/notification', page: () => Notification()),

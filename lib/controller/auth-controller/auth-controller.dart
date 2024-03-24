@@ -1,15 +1,23 @@
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 class AuthController extends GetxController {
-  var isAuthenticated = true.obs; // Obx ile değişiklikleri dinleyeceğiz
+  final  box = GetStorage();
+
+  var isAuthenticated = false.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    isAuthenticated.value = box.read('user') != null;
+  }
 
   void login() {
-    // Giriş yapıldığında
-    isAuthenticated.value = true; // Auth durumunu güncelle
+    isAuthenticated.value = true;
   }
 
   void logout() {
-    // Çıkış yapıldığında
-    isAuthenticated.value = false; // Auth durumunu güncelle
+    isAuthenticated.value = false;
+    box.remove('user');
   }
 }

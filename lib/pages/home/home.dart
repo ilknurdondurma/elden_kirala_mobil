@@ -3,17 +3,20 @@ import 'package:elden_kirala/components/carousel/normal/normal.dart';
 import 'package:elden_kirala/components/text/text.dart';
 import 'package:elden_kirala/constanst/containerSizes.dart';
 import 'package:elden_kirala/constanst/fontSize.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:elden_kirala/constanst/texts.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../api/api.dart';
-import '../../components/carousel/circular/carousel.dart';
 import '../../components/gridView/gridView.dart';
 import '../../components/highlightCard/highlightCard.dart';
-import '../../constanst/colors.dart';
+import '../../controller/auth-controller/auth-controller.dart';
 import '../../models/brand-model/brand-model.dart';
 import '../../models/product-model/product-model.dart';
 import '../../models/category-model/category-model.dart';
 import '../../services/fetcher.dart';
+final box = GetStorage();
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -29,12 +32,17 @@ class _HomeState extends State<Home> {
   late Fetcher productFetcher;
   late Fetcher brandFetcher;
   late Fetcher categoryFetcher;
+  late String userId=box.read('user')['id'].toString();
+
+
+  final TextEditingController _searchController = TextEditingController();
+  final AuthController _authController = Get.find();
 
   @override
   void initState() {
     super.initState();
 
-    productFetcher = Fetcher(Product.fromJson, _setProducts, () => Api.getAllProducts(12));
+    productFetcher = Fetcher(Product.fromJson, _setProducts, () => Api.getAllProducts(userId));
     brandFetcher = Fetcher(Brand.fromJson, _setBrands, () => Api.getAllBrand());
     categoryFetcher = Fetcher(Categories.fromJson, _setCategories, () => Api.getCategories());
 
@@ -60,7 +68,29 @@ class _HomeState extends State<Home> {
       categories = data.cast<Categories>(); // CATEGORY tipine dönüştürme
     });
   }
-  final TextEditingController _searchController = TextEditingController();
+
+  void _updateProductsByCategory(int categoryId)  {
+    if(categoryId==-1) {
+      productFetcher = Fetcher(Product.fromJson, _setProducts, () => Api.getAllProducts(userId));
+    }
+    else {
+      productFetcher = Fetcher(Product.fromJson, _setProducts, () => Api.getProductsByCategoryId(categoryId));
+    }
+    productFetcher.fetchData();
+  }
+
+
+  void _updateProductByBrand(int brandId) {
+    if(brandId==-1) {
+      productFetcher = Fetcher(Product.fromJson, _setProducts, () => Api.getAllProducts(userId));
+    }
+    else {
+      productFetcher=Fetcher(Product.fromJson, _setProducts, () => Api.getProductsByBrandId(brandId));
+    }
+    productFetcher.fetchData();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -68,31 +98,38 @@ class _HomeState extends State<Home> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+        //arama
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
+              child: SizedBox(
                 height: MyContainerSizes.heightSize(context, 0.05), // TextField'ın yüksekliğini ayarlar
                 child: Row(
                   children: [
                     Button(
-                      onPressed: ()=>null,
-                      label: "Tüm Kategoriler",
+                      onPressed: () {
+                          print("*********************************userimiz:*******************************************");
+                          var user=box.read('user');
+                          print(user['name']);
+                          print("********************************giriş durumumuz:************************************");
+                          print(_authController.isAuthenticated);
+
+
+                        },
+                      label: MyTexts.categories,
                       variant: "PurpleOutline",
                       size: "xsmall",
                     ),
-                    SizedBox(width: 10,),
+                    const SizedBox(width: 10,),
                     Expanded( // TextField widget'ını esnek genişlikli (expanded) yapar
-                      child: Container(
-                        child: TextField(
-                          controller: _searchController,
-                          onChanged: null,
-                          decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(horizontal: 12), // İçeriğin etrafındaki boşluğu ayarlar
-                            hintText: 'Aramak istediğiniz şeyi girin...',
-                            prefixIcon: Icon(Icons.search),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
+                      child: TextField(
+                        controller: _searchController,
+                        onChanged: null,
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 10), // İçeriğin etrafındaki boşluğu ayarlar
+                          hintText: MyTexts.search,
+                          prefixIcon: const Icon(Icons.search),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
                         ),
                       ),
@@ -101,24 +138,36 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            Carousel(items: categories,),
+        //kategoriler
+            Carousel(
+                items: categories,
+                border: true,
+                onItemSelected: _updateProductsByCategory),
 
-
-
-
-
-            MyText(text: "Markaları Keşfet") ,
+            const MyText(text: "Markaları Keşfet") ,
         //markalar
-            CircularCarousel(items: brands),
+            Carousel(
+              items: brands,
+              onItemSelected: _updateProductByBrand,
+              isHaveImage: true,
+              border: false,
+              countOfWidth: 7,
+            ),
              MyText(text: "Vitrini Keşfet",fontSize: MyFontSizes.fontSize_3(context),) ,
         // vitrin
-            HighlightCard(imagePath: "assets/vitrin.jpeg"),
-            MyText(text: "Tüm Ürünleri Keşfet") ,
+            const HighlightCard(imagePath: "assets/vitrin.jpeg"),
+            const MyText(text: "Tüm Ürünleri Keşfet") ,
             //ürünler
-            products.isEmpty
-                ? const Center(child: MyText(text:"Ürün bulunamadı..."))
+            products.isEmpty && productFetcher.isLoading // API'den veri bekleniyor
+                ? Center(child: LoadingAnimationWidget.twistingDots(
+              leftDotColor: const Color(0xFF61D4AF),
+              rightDotColor: const Color(0xFF673ab7),
+              size: 20,
+            ),)
+                : products.isEmpty // Ürün bulunamadı
+                ? Center(child: MyText(text: "Ürün bulunamadı"),)
                 : CustomGridView(
-                    products: products,
+              products: products,
             ),
           ],
         ),

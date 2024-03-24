@@ -1,11 +1,13 @@
 import 'package:elden_kirala/constanst/icons.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 import '../../constanst/fontSize.dart';
 import '../../constanst/texts.dart';
 import '../../constanst/colors.dart';
 import '../../controller/auth-controller/auth-controller.dart';
+GetStorage box = GetStorage();
 
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget  {
@@ -36,7 +38,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget  {
                 ),
               ),
               Text(
-                MyTexts.appBarUserTitle,
+                MyTexts.fullName,
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: MyFontSizes.fontSize_1(context),
@@ -72,7 +74,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget  {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
 
 }
@@ -85,11 +87,17 @@ class CustomAppBarInPage extends StatelessWidget implements PreferredSizeWidget 
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text("$title"),
+      title: Text(
+        '$title',
+        textAlign: TextAlign.start,
+        style: TextStyle(
+          fontSize: MyFontSizes.fontSize_1(context),
+        ),
+      ),
       centerTitle: true,
       backgroundColor: MyColors.background,
       leading:IconButton(
-        icon: const Icon(MyIcons.backIcon),
+        icon: const Icon(MyIcons.backIcon,size: 20,),
         onPressed: () {
           Get.back();
         },
@@ -101,7 +109,7 @@ class CustomAppBarInPage extends StatelessWidget implements PreferredSizeWidget 
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 
 }
 
@@ -121,7 +129,7 @@ class CustomAppBarLogout extends StatelessWidget implements PreferredSizeWidget 
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
 class PopupMenu extends StatelessWidget {
@@ -151,8 +159,15 @@ class PopupMenu extends StatelessWidget {
           ),
            PopupMenuItem(
             child: _authController.isAuthenticated.value?const Text('Çıkış Yap'):const Text('Giriş Yap'),
-            onTap: ()=>_authController.isAuthenticated.value?_authController.logout():_authController.login(),
-          ),
+            onTap: () async =>_authController.isAuthenticated.value
+                ? {
+                      _authController.logout() ,
+                      await box.remove('user'),
+                      Get.offAllNamed("/login"),
+                  }
+                : {
+                      _authController.login(),
+                    }),
         ];
       },
       onSelected: (value) {
