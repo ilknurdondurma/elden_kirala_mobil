@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:get_storage/get_storage.dart';
 final  box = GetStorage();
@@ -13,8 +15,14 @@ class Api {
         'Authorization': 'Bearer $token', // Header'a token ekleniyor
       },
   );
-  static Options options = Options(
+  static Options optionsFormData = Options(
     contentType: 'multipart/form-data',
+  );
+  static Options optionsAppJson = Options(
+    headers: {
+      'Authorization': 'Bearer $token', // Header'a token ekleniyor
+    },
+    contentType: 'application/json',
   );
 
   static login(formData) => dio.post('$baseUrl/User/login/', data: formData);
@@ -36,11 +44,11 @@ class Api {
   static getAllBrand() => dio.get('$baseUrl/Brand/get-all');
   //static const String getBrandByCategory = '$baseUrl/Brand/get/:cid';
 
-  //static const String getCommentById = '$baseUrl/Comment/get/:pid';
+  static getCommentById(pid) => dio.get('$baseUrl/Comment/get/$pid');
 
   static getAllFavorites(uid) => dio.get('$baseUrl/Product/get-favori/$uid',options: optionsAuth);
-  //static const String addFavorite = '$baseUrl/Favorite/add';
-  //static const String deleteFavorite = '$baseUrl/Favorite/delete/pid';
+  static addFavorite(jsonData) => dio.post('$baseUrl/Favorite/add',data:jsonData , options: optionsAppJson);
+  static deleteFavorite() => dio.delete('$baseUrl/Favorite/delete/pid' );
 
   //static const String getRentalsByUserId = '$baseUrl/Rental/get-by-user-id/:uid';
   //static const String getRentalsByProductId = '$baseUrl/Rental/get-by-product-id/:pid';

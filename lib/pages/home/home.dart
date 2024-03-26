@@ -110,6 +110,8 @@ class _HomeState extends State<Home> {
                           print("*********************************userimiz:*******************************************");
                           var user=box.read('user');
                           print(user['name']);
+                          print(user['token']);
+                          print(user['id']);
                           print("********************************giriş durumumuz:************************************");
                           print(_authController.isAuthenticated);
 
