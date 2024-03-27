@@ -20,6 +20,8 @@ class MyTexts {
   static const String allRent = "Tüm Kiralamalar";
   static const String details = "Details";
   static const String favorites = "Favorilerim";
+  static const String highlights = "Vitrin";
   static const String messages = "Mesajlarım";
+  static const String addProduct = "İlan Yayınla";
   static const String name = "Eldenkirala.com";
 }

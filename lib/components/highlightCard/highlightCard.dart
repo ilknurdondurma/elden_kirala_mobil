@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../../constanst/colors.dart';
 import '../../constanst/containerSizes.dart';
 import '../buttons/button.dart';
@@ -30,7 +31,10 @@ class HighlightCard extends StatelessWidget {
         child: Row(
           children: [
             Button(
-              onPressed: ()=>null,
+              onPressed: () {
+                print("bastı");
+                Get.toNamed('/highlights');
+              },
               label: text ?? "Ürünleri İncele ",
               variant: "GreenOutline",
               size: "normal",

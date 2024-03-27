@@ -3,7 +3,7 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:elden_kirala/constanst/colors.dart';
 import 'package:elden_kirala/constanst/fontFamily.dart';
 import 'package:elden_kirala/constanst/texts.dart';
-import 'package:elden_kirala/pages/auth/login/login.dart';
+import 'package:elden_kirala/pages/add/product/add_product.dart';
 import 'package:elden_kirala/pages/favorites/favorites.dart';
 import 'package:elden_kirala/pages/home/home.dart';
 import 'package:elden_kirala/pages/message/message.dart';
@@ -60,7 +60,7 @@ class MyAppMain extends StatefulWidget {
 
 class _MyAppMainState extends State<MyAppMain> {
   int _currentIndex = 0;
-  final List _screens = [const Home(),const Message(),const Favorites(),const Account()];
+  final List _screens = [const Home(),const Message(),const Favorites(),const Account(),const AddProduct()];
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -68,10 +68,10 @@ class _MyAppMainState extends State<MyAppMain> {
       appBar: const CustomAppBar(),
       extendBodyBehindAppBar: false,
       body: _screens[_currentIndex],
-      floatingActionButton: const FloatingActionButton(
-          onPressed: add,
+      floatingActionButton: FloatingActionButton(
+          onPressed: ()=>Get.toNamed('/add-product'),
           backgroundColor: MyColors.secondary,
-          child: IconButton(
+          child: const IconButton(
             icon: Icon(MyIcons.addIcon,color: Colors.white,),
             onPressed: null,
           ),),

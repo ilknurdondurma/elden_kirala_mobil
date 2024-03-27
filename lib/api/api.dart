@@ -30,6 +30,7 @@ class Api {
   //static const String updateUser = '$baseUrl/User/update/:id';
 
   static getAllProducts(userId) => dio.get('$baseUrl/Product/get-all/$userId');
+  static getHighlights(userId) => dio.get('$baseUrl/Product/get-highlights/$userId');
   static getProductsByCategoryId(catId) => dio.get('$baseUrl/Product/get-category/$catId');
   static getProductsByBrandId(brId) => dio.get('$baseUrl/Product/get-brand/$brId');
   static getProductsById(pid,uid) => dio.get('$baseUrl/Product/get/$pid/$uid');
@@ -48,7 +49,7 @@ class Api {
 
   static getAllFavorites(uid) => dio.get('$baseUrl/Product/get-favori/$uid',options: optionsAuth);
   static addFavorite(jsonData) => dio.post('$baseUrl/Favorite/add',data:jsonData , options: optionsAppJson);
-  static deleteFavorite() => dio.delete('$baseUrl/Favorite/delete/pid' );
+  static deleteFavorite(uid,pid) => dio.delete('$baseUrl/Favorite/delete/$uid/$pid' ,options: optionsAuth );
 
   //static const String getRentalsByUserId = '$baseUrl/Rental/get-by-user-id/:uid';
   //static const String getRentalsByProductId = '$baseUrl/Rental/get-by-product-id/:pid';

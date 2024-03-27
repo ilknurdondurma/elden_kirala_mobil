@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:elden_kirala/components/commentCard/commentCard.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_carousel_slider/carousel_slider.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:dio/dio.dart' as dio;
@@ -29,61 +28,72 @@ final Product product;
 
 class _DetailCardState extends State<DetailCard> {
 
-  late CarouselSliderController _carouselSliderController; // Add this line
   int index=0;
   final ScrollController _controller = ScrollController();
   bool isSucces =false ;
+  late int? isLiked =widget.product.liked ;
+
+
 
 
   @override
   void initState() {
     super.initState();
-    _carouselSliderController = CarouselSliderController();
   }
+
   void goToPrevious() {
     setState(() {
       index = (index - 1).clamp(0, 2);
-
     });
-    _carouselSliderController.previousPage();
   }
+
   void goToNext() {
     setState(() {
-      index = (index + 1).clamp(0, 2);
+      index = (index + 1) % 3; // Modulo operation to cycle through images
     });
-    _carouselSliderController.nextPage();
   }
+
+
   Future<void> handleFavorite() async {
     try {
       print(box.read('user')['id']);
+      var userId=box.read('user')['id'];
       print(widget.product.productId);
+      var productId=widget.product.productId;
 
       Map<String, dynamic> jsonData = {
-        'userId': box.read('user')['id'],
-        'productId': widget.product.productId,
+        'userId': userId,
+        'productId': productId,
       };
 
-      dio.Response response = await Api.addFavorite(jsonData);
-      if (response.statusCode == 200) {
-        print("İstek başarıyla gönderildi. Yanıt: ${response.data}");
-        Map<String, dynamic> responseData = response.data['data'];
-        print(responseData);
-        setState(() {
-          isSucces = true;
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('İşlem başarıyla gerçekleştirildi.'),
-            duration: Duration(seconds: 2),
-          ),
-        );
-        await Future.delayed(Duration(seconds: 2));
-        Get.offAndToNamed('/detail/${widget.product.productId}');
-      } else if (response.statusCode == 400 ||
-          response.statusCode == 401 ||
-          response.statusCode == 402) {
-        print('auth hatası');
+      dio.Response response;
+      if (isLiked == 0) {
+        response = await Api.addFavorite(jsonData);
+      } else {
+        response = await Api.deleteFavorite(userId,productId);
+      }
 
+      if (response.statusCode == 200) {
+            print("İstek başarıyla gönderildi. Yanıt: ${response.data}");
+            setState(() {
+              isSucces = true;
+              isLiked = isLiked == 1 ? 0 : 1; // Toggle isLiked state
+            });
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('İşlem başarıyla gerçekleştirildi.'),
+                duration: Duration(seconds: 2),
+              ),
+            );
+            await Future.delayed(const Duration(seconds: 2));
+            //isLiked==1 ?Get.offAndToNamed('/detail/${widget.product.productId}'):null;
+
+      }
+      else if (response.statusCode == 400 ||
+          response.statusCode == 401 ||
+          response.statusCode == 42 ||
+          response.statusCode == 415) {
+        print('auth hatası');
         Get.offAllNamed('/login');
       } else {
         print('Eklenirken bir hata oluştu');
@@ -91,7 +101,6 @@ class _DetailCardState extends State<DetailCard> {
     } catch (e) {
       print("İstek sırasında bir hata oluştu: $e");
     }
-
   }
 
 
@@ -111,7 +120,7 @@ class _DetailCardState extends State<DetailCard> {
                   children: [
                     //resim
                     Container(
-                      height: MyContainerSizes.heightSize(context, 0.5),
+                      height: MyContainerSizes.heightSize(context, 0.6),
                       width: MyContainerSizes.widthSize(context, 1),
                       decoration: BoxDecoration(
                         border: Border.all(width: 1, color: MyColors.tertiary),
@@ -120,64 +129,56 @@ class _DetailCardState extends State<DetailCard> {
                       child: Column(
                         children: [
                           Expanded(
-                            child: FractionallySizedBox(
-                              widthFactor: 0.9,
-                              heightFactor: 1.0,
-                              child: SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.5, // Set the width to half of the screen width
-                                child: Column(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.end,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: handleFavorite,
-                                            child: Icon(
-                                              widget.product.liked == 1 ? Icons.favorite : Icons.favorite_border,
-                                              color: widget.product.liked == 1 ? Colors.red : null,                                          ),
-                                          ),
-                                        ],
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: handleFavorite,
+                                        child: Icon(
+                                          isLiked == 1
+                                              ? Icons.favorite
+                                              : Icons.favorite_border,
+                                          color: isLiked == 1 ? Colors.red : null,
+                                        ),
                                       ),
-                                    ),
-                                    Expanded(
-                                      child: CarouselSlider.builder(
-                                        controller: _carouselSliderController,
-                                        itemCount: 3, // Assuming you always have 3 images
-                                        slideBuilder: (index) {
-                                          List<String> imageUrls = [
-                                            widget.product.filE_URL_1!,
-                                            widget.product.filE_URL_2!,
-                                            widget.product.filE_URL_3!,
-                                          ];
-                                          return Image.memory(
-                                            base64Decode(imageUrls[index]),
-                                            fit: BoxFit.cover,
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                        children: [
-                                          GestureDetector(
-                                            onTap: goToPrevious,
-                                            child: Icon(Icons.arrow_back,color: index<=0  ? Colors.grey : MyColors.primary ),
-                                          ),
-                                          GestureDetector(
-                                            onTap: goToNext,
-                                            child: Icon(Icons.arrow_forward,color:index>=2 ? Colors.grey : MyColors.primary ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ),)
+                                Expanded(
+                                  child: Image.memory(
+                                    base64Decode([
+                                      widget.product.filE_URL_1!,
+                                      widget.product.filE_URL_2!,
+                                      widget.product.filE_URL_3!,
+                                    ][index]),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: goToPrevious,
+                                        child: Icon(Icons.arrow_back,
+                                            color: index <= 0 ? Colors.grey : MyColors.primary),
+                                      ),
+                                      GestureDetector(
+                                        onTap: goToNext,
+                                        child: Icon(Icons.arrow_forward,
+                                            color: index >= 2 ? Colors.grey : MyColors.primary),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
                         ],
                       ),
                     ),
@@ -289,17 +290,31 @@ class _DetailCardState extends State<DetailCard> {
                     //descrition
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                      child: Column(
                         children: [
-                          Expanded(
-                            child: Text(
-                              widget.product.description.toString(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text("Açıklamalar : ",
                               style: TextStyle(
                                 fontSize: MyFontSizes.fontSize_1(context),
-                                color: Colors.black54,
+                                fontWeight: FontWeight.bold,
+                              ),),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  widget.product.description.toString(),
+                                  style: TextStyle(
+                                    fontSize: MyFontSizes.fontSize_1(context),
+                                    color: Colors.black54,
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ),
                         ],
                       ),
@@ -312,7 +327,10 @@ class _DetailCardState extends State<DetailCard> {
                         children: [
                           Row(
                             children: [
-                              const Text("Ürün Durumu : ",style: TextStyle(fontWeight: FontWeight.bold),),
+                              Text("Ürün Durumu : ",style:TextStyle(
+                                fontSize: MyFontSizes.fontSize_1(context),
+                                fontWeight: FontWeight.bold,
+                              ),),
                               Button(
                                 label: '${widget.product.status}',
                                 onPressed: () {  },
@@ -323,7 +341,11 @@ class _DetailCardState extends State<DetailCard> {
                           ),
                           Row(
                             children: [
-                              const Text("Min Kiralama : ",style: TextStyle(fontWeight: FontWeight.bold),),
+                              Text("Min Kiralama : ",
+                                style: TextStyle(
+                                  fontSize: MyFontSizes.fontSize_1(context),
+                                  fontWeight: FontWeight.bold,
+                                ),),
                               Button(
                                 label: ' ${widget.product.minRentalPeriod}  Ay',
                                 onPressed: () {  },
@@ -334,7 +356,11 @@ class _DetailCardState extends State<DetailCard> {
                           ),
                           Row(
                             children: [
-                              const Text("Max Kiralama : ",style: TextStyle(fontWeight: FontWeight.bold),),
+                               Text("Max Kiralama : ",
+                                 style:TextStyle(
+                                   fontSize: MyFontSizes.fontSize_1(context),
+                                   fontWeight: FontWeight.bold,
+                                 ),),
                               Button(
                                 label: '${widget.product.maxRentalPeriod}  Ay ',
                                 onPressed: () {  },
