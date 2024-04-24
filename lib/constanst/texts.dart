@@ -8,6 +8,10 @@ class MyTexts {
     final usersurname = box.read("user")['surname'] ?? '';
     return '$username $usersurname';
   }
+  static String get email {
+    final usermail = box.read("user")['email'] ?? '';
+    return '$usermail';
+  }
 
   static const String appBarTitle = "Welcome";
   static const String categories = "Tüm Kategoriler";

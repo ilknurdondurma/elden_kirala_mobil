@@ -70,81 +70,83 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Image.asset('assets/logo.png'),
-            const SizedBox(height: 20),
-            Text(
-              MyTexts.name,
-              style: TextStyle(fontSize: MyFontSizes.fontSize_3(context)),
-            ),
-            const SizedBox(height: 30),
-            TextFormField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image.asset('assets/logo.png'),
+              const SizedBox(height: 20),
+              Text(
+                MyTexts.name,
+                style: TextStyle(fontSize: MyFontSizes.fontSize_3(context)),
               ),
-              validator: (value) {
-                final emailError =
-                    FormValidator.requiredField(value, 'email') ??
-                        FormValidator.emailField(value);
-                return emailError;
-              },
-            ),
-            TextFormField(
-              controller: _passwordController,
-              decoration: const InputDecoration(
-                labelText: 'Password',
+              const SizedBox(height: 30),
+              TextFormField(
+                controller: _emailController,
+                decoration: const InputDecoration(
+                  labelText: 'Email',
+                ),
+                validator: (value) {
+                  final emailError =
+                      FormValidator.requiredField(value, 'email') ??
+                          FormValidator.emailField(value);
+                  return emailError;
+                },
               ),
-              obscureText: true,
-              validator: (value) {
-                final passError =
-                FormValidator.requiredField(value, 'password');
-                return passError;
-              },
-            ),
-            const SizedBox(height: 20),
-            GestureDetector(
-              onTap: () {
-                print("*********************************userimiz:*******************************************");
-                print(box.read('user')!=null ?box.read('user')['name']:"yok" );
-                print("********************************giriş durumumuz:************************************");
-                print(_authController.isAuthenticated);
-
-
-              },
-              child: Icon(Icons.add_alert_sharp),
-            ),
-            Button(
-              onPressed: _isLoading
-                  ? () {}
-                  : () {
-                if (_formKey.currentState!.validate()) {
-                  // Perform login here
-                  String email = _emailController.text;
-                  String password = _passwordController.text;
-                  print('Username: $email');
-                  print('Password: $password');
-                  handleSubmit(email, password);
-                }
-              },
-              label: "Login",
-              size: "normal",
-              variant: "Purple",
-            ),
-            const SizedBox(height: 10),
-            GestureDetector(
-              onTap: () => Get.offAllNamed("/signup"),
-              child: const Text(
-                "Hesabın Yok mu ? Hemen Üye ol",
+              TextFormField(
+                controller: _passwordController,
+                decoration: const InputDecoration(
+                  labelText: 'Password',
+                ),
+                obscureText: true,
+                validator: (value) {
+                  final passError =
+                  FormValidator.requiredField(value, 'password');
+                  return passError;
+                },
               ),
-            ),
-          ],
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: () {
+                  print("*********************************userimiz:*******************************************");
+                  print(box.read('user')!=null ?box.read('user')['name']:"yok" );
+                  print("********************************giriş durumumuz:************************************");
+                  print(_authController.isAuthenticated);
+      
+      
+                },
+                //child: Icon(Icons.add_alert_sharp),
+              ),
+              Button(
+                onPressed: _isLoading
+                    ? () {}
+                    : () {
+                  if (_formKey.currentState!.validate()) {
+                    // Perform login here
+                    String email = _emailController.text;
+                    String password = _passwordController.text;
+                    print('Username: $email');
+                    print('Password: $password');
+                    handleSubmit(email, password);
+                  }
+                },
+                label: "Login",
+                size: "normal",
+                variant: "Purple",
+              ),
+              const SizedBox(height: 10),
+              GestureDetector(
+                onTap: () => Get.offAllNamed("/signup"),
+                child: const Text(
+                  "Hesabın Yok mu ? Hemen Üye ol",
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

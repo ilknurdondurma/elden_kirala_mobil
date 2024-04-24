@@ -62,7 +62,7 @@ Color _getColor(String variant) {
       return MyColors.primary;
 
     case 'Purple':
-      return MyColors.secondary;
+      return MyColors.secondary.withOpacity(0.8);
 
     case 'GreenOutline':
       return Colors.white;

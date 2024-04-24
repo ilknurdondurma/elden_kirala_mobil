@@ -43,7 +43,7 @@ class Api {
   static getCategories() => dio.get('$baseUrl/Category/get-categories');
 
   static getAllBrand() => dio.get('$baseUrl/Brand/get-all');
-  //static const String getBrandByCategory = '$baseUrl/Brand/get/:cid';
+  static getBrandByCategoryId(cid) => dio.get('$baseUrl/Brand/get/$cid');
 
   static getCommentById(pid) => dio.get('$baseUrl/Comment/get/$pid');
 

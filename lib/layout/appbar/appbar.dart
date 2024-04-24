@@ -65,7 +65,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget  {
             },
           ),
         ),*/
-         PopupMenu(),
+         //PopupMenu(),
 
 
       ],
@@ -82,7 +82,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget  {
 class CustomAppBarInPage extends StatelessWidget implements PreferredSizeWidget {
 
   final String? title;
-  const CustomAppBarInPage({super.key, required this.title});
+  final bool? showLeadingIcon;
+  const CustomAppBarInPage({super.key, required this.title, this.showLeadingIcon=true});
 
   @override
   Widget build(BuildContext context) {
@@ -92,18 +93,19 @@ class CustomAppBarInPage extends StatelessWidget implements PreferredSizeWidget 
         textAlign: TextAlign.start,
         style: TextStyle(
           fontSize: MyFontSizes.fontSize_1(context),
+          fontWeight: FontWeight.w500
         ),
       ),
       centerTitle: true,
-      backgroundColor: MyColors.background,
-      leading:IconButton(
-        icon: const Icon(MyIcons.backIcon,size: 20,),
+      backgroundColor: MyColors.tertiary.withOpacity(0.1),
+      leading: showLeadingIcon! ? IconButton(
+        icon: const Icon(MyIcons.backIcon, size: 20,),
         onPressed: () {
           Get.back();
         },
-      ),
+      ) : null,
       actions:  <Widget>[
-        PopupMenu(),
+        //PopupMenu(),
       ],
     );
   }

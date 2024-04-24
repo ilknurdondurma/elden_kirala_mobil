@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       getPages: RouteManager.routes,
       initialRoute: initialRoute,
-      debugShowCheckedModeBanner: false,
+      debugShowCheckedModeBanner: true,
       title: 'Flutter Demo',
       debugShowMaterialGrid: false,
       theme: ThemeData(
@@ -60,21 +60,23 @@ class MyAppMain extends StatefulWidget {
 
 class _MyAppMainState extends State<MyAppMain> {
   int _currentIndex = 0;
-  final List _screens = [const Home(),const Message(),const Favorites(),const Account(),const AddProduct()];
+  final List _screens = [const Home(),const Message(),const Favorites(),const Account()];
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
       backgroundColor: MyColors.background,
-      appBar: const CustomAppBar(),
+      appBar: _currentIndex != 3 ? CustomAppBar() :null ,
       extendBodyBehindAppBar: false,
       body: _screens[_currentIndex],
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: _currentIndex != 3
+        ? FloatingActionButton(
           onPressed: ()=>Get.toNamed('/add-product'),
           backgroundColor: MyColors.secondary,
           child: const IconButton(
             icon: Icon(MyIcons.addIcon,color: Colors.white,),
             onPressed: null,
-          ),),
+          ),)
+      : null,
       floatingActionButtonLocation: FloatingActionButtonLocation.miniEndFloat,
       bottomNavigationBar: buildBottomNavyBar(context),
 

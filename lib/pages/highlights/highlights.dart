@@ -85,7 +85,7 @@ class _HighlightsState extends State<Highlights> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar(),
+        appBar: CustomAppBarInPage(title: "Vitrin'e Hoşgeldiniz",),
         body:  SingleChildScrollView(
           child: Column(
             children: [
@@ -104,7 +104,7 @@ class _HighlightsState extends State<Highlights> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: MyText(text: "Vitrin'e Hoşgeldiniz",alignment: 'center',fontSize: MyFontSizes.fontSize_3(context),),
+                //child: MyText(text: "Vitrin'e Hoşgeldiniz",alignment: 'center',fontSize: MyFontSizes.fontSize_3(context),),
               ) ,
               products.isEmpty && productFetcher.isLoading // API'den veri bekleniyor
                   ? Center(child: LoadingAnimationWidget.twistingDots(
