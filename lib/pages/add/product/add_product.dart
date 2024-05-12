@@ -2,14 +2,11 @@ import 'dart:io';
 import 'package:elden_kirala/constanst/containerSizes.dart';
 import 'package:elden_kirala/layout/appbar/appbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import '../../../api/api.dart';
 import '../../../components/buttons/button.dart';
-import '../../../components/dropdown/dropdown.dart';
 import '../../../components/imagePicker/image_picker.dart';
-import '../../../components/input/custom_input_field.dart';
+import '../../../components/textField/custom_input_field.dart';
 import '../../../constanst/colors.dart';
 import '../../../constanst/fontSize.dart';
 import '../../../models/brand-model/brand-model.dart';
@@ -101,7 +98,7 @@ class _AddProductState extends State<AddProduct> {
               ),
               child: Column(
                 children: [
-                  SizedBox(height: 10,),
+                  const SizedBox(height: 10,),
               //title
                   Text( "İlan Detayları",
                     style: TextStyle(
@@ -111,7 +108,7 @@ class _AddProductState extends State<AddProduct> {
                     ),
                     maxLines: 1,
                     textAlign: TextAlign.start,),
-                  SizedBox(height: 5,),
+                  const SizedBox(height: 5,),
 
 
 
@@ -280,7 +277,7 @@ class _AddProductState extends State<AddProduct> {
               //baslık
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: CustomInputField(
+                    child: CustomTextField(
                       controller: headerController,
                       label: "İlan Başlığı",
                       placeholder: "İlan Başlığı ..| ",
@@ -289,7 +286,7 @@ class _AddProductState extends State<AddProduct> {
               //acıklama
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: CustomInputField(
+                    child: CustomTextField(
                       controller: descriptionController,
                       label: "İlan Açıklaması",
                       maxLines: 5,
@@ -308,7 +305,7 @@ class _AddProductState extends State<AddProduct> {
                         ),
                         maxLines: 1,
                         textAlign: TextAlign.center,),
-                      Checkbox(
+                      const Checkbox(
                           value: false,
                           onChanged: null,
                         checkColor: MyColors.secondary,
@@ -322,7 +319,7 @@ class _AddProductState extends State<AddProduct> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: CustomInputField(
+                        child: CustomTextField(
                           width: 0.3,
                           controller: minRentalController,
                           number: true,
@@ -332,7 +329,7 @@ class _AddProductState extends State<AddProduct> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: CustomInputField(
+                        child: CustomTextField(
                           width: 0.3,
                           controller: maxRentalController,
                           number: true,
@@ -345,38 +342,36 @@ class _AddProductState extends State<AddProduct> {
               //durumu
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      child: Column(
-                        children: [
-                          Text("Durumu :",
-                            style: TextStyle(
-                                fontSize: MyFontSizes.fontSize_1(context),
-                                fontWeight: FontWeight.w500
+                    child: Column(
+                      children: [
+                        Text("Durumu :",
+                          style: TextStyle(
+                              fontSize: MyFontSizes.fontSize_1(context),
+                              fontWeight: FontWeight.w500
 
-                            ),
-                            maxLines: 1,
-                            textAlign: TextAlign.center,),
-                          ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: buttonData.length,
-                            itemBuilder: (context, index) {
-                              final button = buttonData[index];
-                              return Button(
-                                label: button['label'].toString(),
-                                onPressed: () {
-                                  setState(() {
-                                    selectedState = button['label'].toString();
-                                    print(selectedState);
-                                  });
-                                },
-                                size: 'xsmall',
-                                variant: button['label']==selectedState ?"Purple": button['variant'].toString(),
-                              );
-                            },
-                          )
+                          ),
+                          maxLines: 1,
+                          textAlign: TextAlign.center,),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: buttonData.length,
+                          itemBuilder: (context, index) {
+                            final button = buttonData[index];
+                            return Button(
+                              label: button['label'].toString(),
+                              onPressed: () {
+                                setState(() {
+                                  selectedState = button['label'].toString();
+                                  print(selectedState);
+                                });
+                              },
+                              size: 'xsmall',
+                              variant: button['label']==selectedState ?"Purple": button['variant'].toString(),
+                            );
+                          },
+                        )
 
-                        ],
-                      ),
+                      ],
                     ),
                   ),
               //resimler
@@ -415,7 +410,7 @@ class _AddProductState extends State<AddProduct> {
 Container buildBottomBar(BuildContext context) {
   return Container(
     decoration:  BoxDecoration(
-      border: Border.symmetric(vertical:BorderSide.none,horizontal: BorderSide(width: 1,color: MyColors.tertiary)),
+      border: const Border.symmetric(vertical:BorderSide.none,horizontal: BorderSide(width: 1,color: MyColors.tertiary)),
       color: MyColors.secondary.withOpacity(0.8)
     ),
     height: MediaQuery.of(context).size.height*0.06,

@@ -9,6 +9,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../api/api.dart';
 import '../../components/gridView/gridView.dart';
 import '../../components/highlightCard/highlightCard.dart';
+import '../../components/progressIndicator/progressIndicator.dart';
 import '../../models/brand-model/brand-model.dart';
 import '../../models/product-model/product-model.dart';
 import '../../models/category-model/category-model.dart';
@@ -174,16 +175,16 @@ class _HomeState extends State<Home> {
             ),
             // vitrin
             const HighlightCard(imagePath: "assets/vitrin.jpeg"),
+            GestureDetector(
+              onTap: () => {print(box.read("user"))},
+              child: const Text(
+                "bak",
+              ),
+            ),
             const MyText(text: "Tüm Ürünleri Keşfet"),
             //ürünler
             products.isEmpty && productFetcher.isLoading
-                ? Center(
-              child: LoadingAnimationWidget.twistingDots(
-                leftDotColor: const Color(0xFF61D4AF),
-                rightDotColor: const Color(0xFF673ab7),
-                size: 20,
-              ),
-            )
+                ? IndicatorProgressBar()
                 : products.isEmpty
                 ? const Center(child: MyText(text: "Ürün bulunamadı"))
                 : CustomGridView(
@@ -209,6 +210,8 @@ class _HomeState extends State<Home> {
     );
   }
 }
+
+
 
 
 

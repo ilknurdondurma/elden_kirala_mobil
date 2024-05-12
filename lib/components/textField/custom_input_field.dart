@@ -4,22 +4,28 @@ import '../../constanst/containerSizes.dart';
 import '../../constanst/fontSize.dart';
 import '../../pages/auth/validate/validator.dart';
 
-class CustomInputField extends StatelessWidget {
+class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
+  final Function(String?)? onChanged;
   final String? placeholder;
   final bool number;
+  final bool? isBorder;
+  final Icon? icon;
   final String? label;
   final int? maxLines;
   final double? width;
 
-  const CustomInputField({
+  const CustomTextField({
     Key? key,
     required this.controller,
     this.placeholder = "",
     this.number=false,
     this.label = "",
     this.maxLines = 1,
-    this.width=1
+    this.width=1,
+    this.isBorder=false,
+    this.icon,
+    this.onChanged,
   }) : super(key: key);
 
 
@@ -30,36 +36,30 @@ class CustomInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding:  const EdgeInsets.only(bottom: 8),
       child: Column(
         children: [
-          Text(
-            label!,
-            style: TextStyle(
-              fontSize: MyFontSizes.fontSize_0(context),
-              fontWeight: FontWeight.w500,
-            ),
-            maxLines: 1,
-            textAlign: TextAlign.center,
-          ),
-          Container(
-            //color: MyColors.tertiary,
+          SizedBox(
             width: MyContainerSizes.widthSize(context, width),
-            //height: MyContainerSizes.heightSize(context, 0.06),
             child: TextFormField(
+              onChanged: onChanged,
               keyboardType: number==true ? TextInputType.number: null,
               maxLines: maxLines,
               controller: controller,
-
               decoration: InputDecoration(
-                border: const OutlineInputBorder(
-                  borderSide: BorderSide(color: MyColors.tertiary, width:1),
-                  borderRadius: BorderRadius.all(Radius.circular(10))
-                ),
-                labelText: placeholder,
+                labelStyle: TextStyle(fontSize: MyFontSizes.fontSize_0(context)),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 8),
+                border:  isBorder! ? OutlineInputBorder(
+                    borderSide: BorderSide(color: MyColors.tertiary, width:0.5),
+                    borderRadius: BorderRadius.all(Radius.circular(10))
+                ) : null,
+
+                labelText: label,
                 alignLabelWithHint: true,
                 isDense: true,
-                contentPadding: EdgeInsets.all(8)
+                hintText: placeholder,
+                hintStyle:TextStyle(fontSize: MyFontSizes.fontSize_0(context)),
+                prefixIcon:icon,
               ),
                 validator:(value)=> validate(value,label),
             ),

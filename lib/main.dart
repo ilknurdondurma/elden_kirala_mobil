@@ -3,11 +3,10 @@ import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:elden_kirala/constanst/colors.dart';
 import 'package:elden_kirala/constanst/fontFamily.dart';
 import 'package:elden_kirala/constanst/texts.dart';
-import 'package:elden_kirala/pages/add/product/add_product.dart';
 import 'package:elden_kirala/pages/favorites/favorites.dart';
 import 'package:elden_kirala/pages/home/home.dart';
 import 'package:elden_kirala/pages/message/message.dart';
-import 'package:elden_kirala/pages/settings/account/account.dart';
+import 'package:elden_kirala/pages/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:elden_kirala/routes/route.dart';
 import 'package:get/get.dart';
@@ -60,7 +59,7 @@ class MyAppMain extends StatefulWidget {
 
 class _MyAppMainState extends State<MyAppMain> {
   int _currentIndex = 0;
-  final List _screens = [const Home(),const Message(),const Favorites(),const Account()];
+  final List _screens = [const Home(),const Message(),const Favorites(),const Profile()];
   @override
   Widget build(BuildContext context) {
     return  Scaffold(

@@ -5,6 +5,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../api/api.dart';
 import '../../components/carousel/normal/normal.dart';
 import '../../components/gridView/gridView.dart';
+import '../../components/progressIndicator/progressIndicator.dart';
 import '../../components/text/text.dart';
 import '../../constanst/fontSize.dart';
 import '../../constanst/texts.dart';
@@ -107,11 +108,7 @@ class _HighlightsState extends State<Highlights> {
                 //child: MyText(text: "Vitrin'e Hoşgeldiniz",alignment: 'center',fontSize: MyFontSizes.fontSize_3(context),),
               ) ,
               products.isEmpty && productFetcher.isLoading // API'den veri bekleniyor
-                  ? Center(child: LoadingAnimationWidget.twistingDots(
-                leftDotColor: const Color(0xFF61D4AF),
-                rightDotColor: const Color(0xFF673ab7),
-                size: 20,
-              ),)
+                  ? IndicatorProgressBar()
                   : products.isEmpty // Ürün bulunamadı
                   ? Center(child: MyText(text: "Ürün bulunamadı"),)
                   : CustomGridView(

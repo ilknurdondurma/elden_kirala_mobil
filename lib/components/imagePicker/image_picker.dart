@@ -8,6 +8,7 @@ import '../buttons/button.dart';
 class CustomImagePicker extends StatefulWidget {
   final int? imageCount;
   final double? squareSize;
+  final String? defaultImagePath;
   final Function(List<File?> pickedImages)? onImagesPicked; // Callback function to return selected images
 
   const CustomImagePicker(
@@ -15,8 +16,8 @@ class CustomImagePicker extends StatefulWidget {
         Key? key,
         this.imageCount=1,
         this.squareSize=100,
+        this.defaultImagePath,
         this.onImagesPicked,
-
 
       });
 
@@ -27,7 +28,17 @@ class CustomImagePicker extends StatefulWidget {
 class _CustomImagePickerState extends State<CustomImagePicker> {
   List<File?> pickedImages = List.filled(3, null); // List to store picked images
   List<bool> isPickedList = List.filled(3, false); // List to track whether image is picked or not
-
+  @override
+  void initState() {
+    super.initState();
+    // Set the default image if provided
+    if (widget.defaultImagePath != null) {
+      setState(() {
+        pickedImages[0] = File(widget.defaultImagePath!);
+        isPickedList[0] = true;
+      });
+    }
+  }
   Future<void> pickImage(int index, ImageSource source) async {
     final ImagePicker picker = ImagePicker();
     final XFile? image = await picker.pickImage(source: source);

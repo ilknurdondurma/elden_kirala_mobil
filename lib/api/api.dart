@@ -10,24 +10,41 @@ class Api {
   static const String baseUrl = 'http://10.0.2.2:5058/api/v2';
   static String token=box.read('user')['token'].toString();
 
+  //--------token
   static Options optionsAuth = Options(
       headers: {
         'Authorization': 'Bearer $token', // Header'a token ekleniyor
       },
   );
+
+  //--------formdata
   static Options optionsFormData = Options(
     contentType: 'multipart/form-data',
   );
+
+  //--------application/json
   static Options optionsAppJson = Options(
+    headers: {
+      'Content-Type': 'application/json-patch+json', // Header'a token ekleniyor
+    },
+  );
+
+  //--------application/json + token
+  static Options optionsAppJsonandToken = Options(
     headers: {
       'Authorization': 'Bearer $token', // Header'a token ekleniyor
     },
     contentType: 'application/json',
   );
 
+
+
+
+
+
   static login(formData) => dio.post('$baseUrl/User/login/', data: formData);
   //static const String signUp = '$baseUrl/User/sign-up';
-  //static const String updateUser = '$baseUrl/User/update/:id';
+  static  updateUser(userId,updatedUser) => dio.put('$baseUrl/User/update/$userId',data: updatedUser);
 
   static getAllProducts(userId) => dio.get('$baseUrl/Product/get-all/$userId');
   static getHighlights(userId) => dio.get('$baseUrl/Product/get-highlights/$userId');
@@ -48,10 +65,10 @@ class Api {
   static getCommentById(pid) => dio.get('$baseUrl/Comment/get/$pid');
 
   static getAllFavorites(uid) => dio.get('$baseUrl/Product/get-favori/$uid',options: optionsAuth);
-  static addFavorite(jsonData) => dio.post('$baseUrl/Favorite/add',data:jsonData , options: optionsAppJson);
+  static addFavorite(jsonData) => dio.post('$baseUrl/Favorite/add',data:jsonData , options: optionsAppJsonandToken);
   static deleteFavorite(uid,pid) => dio.delete('$baseUrl/Favorite/delete/$uid/$pid' ,options: optionsAuth );
 
-  //static const String getRentalsByUserId = '$baseUrl/Rental/get-by-user-id/:uid';
+  static getRentalsByUserId(userId) => dio.get('$baseUrl/Rental/get-by-user-id/$userId') ;
   //static const String getRentalsByProductId = '$baseUrl/Rental/get-by-product-id/:pid';
   //static const String addRental = '$baseUrl/Rental/add';
 

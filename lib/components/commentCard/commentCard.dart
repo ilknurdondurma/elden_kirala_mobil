@@ -9,6 +9,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../api/api.dart';
 import '../../constanst/colors.dart';
 import '../../services/fetcher.dart';
+import '../progressIndicator/progressIndicator.dart';
 import '../text/text.dart';
 
 class CommentCard extends StatefulWidget {
@@ -51,11 +52,7 @@ class _CommentCardState extends State<CommentCard> {
       controller: _controller,
       child: Container(
         child:  comments.isEmpty && commentFetcher.isLoading // API'den veri bekleniyor
-            ? Center(child: LoadingAnimationWidget.twistingDots(
-          leftDotColor: const Color(0xFF61D4AF),
-          rightDotColor: const Color(0xFF673ab7),
-          size: 20,
-        ),)
+            ? IndicatorProgressBar()
             : comments.isEmpty // Ürün bulunamadı
             ? Container(
                 width: MyContainerSizes.widthSize(context, 0.95),

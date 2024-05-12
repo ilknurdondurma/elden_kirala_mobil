@@ -14,7 +14,7 @@ class Carousel extends StatefulWidget {
 
   final Function(int) onItemSelected; // onCategorySelected parametresi eklendi
 
-  const Carousel({Key? key, required this.items, required this.onItemSelected, this.isHaveImage, this.border, this.countOfWidth}) : super(key: key);
+  const Carousel({Key? key, required this.items, required this.onItemSelected, this.isHaveImage=false, this.border, this.countOfWidth}) : super(key: key);
 
   @override
   _CarouselState createState() => _CarouselState();

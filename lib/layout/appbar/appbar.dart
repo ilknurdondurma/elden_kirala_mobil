@@ -9,7 +9,6 @@ import '../../constanst/colors.dart';
 import '../../controller/auth-controller/auth-controller.dart';
 GetStorage box = GetStorage();
 
-
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget  {
   const CustomAppBar({super.key});
 
@@ -65,7 +64,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget  {
             },
           ),
         ),*/
-         //PopupMenu(),
+         PopupMenu(),
 
 
       ],
@@ -83,7 +82,17 @@ class CustomAppBarInPage extends StatelessWidget implements PreferredSizeWidget 
 
   final String? title;
   final bool? showLeadingIcon;
-  const CustomAppBarInPage({super.key, required this.title, this.showLeadingIcon=true});
+  final PreferredSizeWidget? bottom;
+  final double? toolbarHeight;
+
+  const CustomAppBarInPage({
+    super.key,
+    required this.title,
+    this.showLeadingIcon=true,
+    this.bottom,
+    this.toolbarHeight
+
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +106,8 @@ class CustomAppBarInPage extends StatelessWidget implements PreferredSizeWidget 
         ),
       ),
       centerTitle: true,
+      bottom: bottom,
+      toolbarHeight: toolbarHeight,
       backgroundColor: MyColors.tertiary.withOpacity(0.1),
       leading: showLeadingIcon! ? IconButton(
         icon: const Icon(MyIcons.backIcon, size: 20,),
@@ -104,14 +115,12 @@ class CustomAppBarInPage extends StatelessWidget implements PreferredSizeWidget 
           Get.back();
         },
       ) : null,
-      actions:  <Widget>[
-        //PopupMenu(),
-      ],
+
     );
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize =>  Size.fromHeight(toolbarHeight ?? kToolbarHeight);
 
 }
 
@@ -147,18 +156,6 @@ class PopupMenu extends StatelessWidget {
       useRootNavigator: true,
       itemBuilder: (BuildContext context) {
         return <PopupMenuEntry>[
-          const PopupMenuItem(
-            value: 'security',
-            child: Text('Güvenlik'),
-          ),
-          const PopupMenuItem(
-            value: 'addresses',
-            child: Text('Adreslerim'),
-          ),
-          const PopupMenuItem(
-            value: 'all-rent',
-            child: Text('Tüm Kiralamalar'),
-          ),
            PopupMenuItem(
             child: _authController.isAuthenticated.value?const Text('Çıkış Yap'):const Text('Giriş Yap'),
             onTap: () async =>_authController.isAuthenticated.value

@@ -4,6 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../../api/api.dart';
 import '../../components/detailsCard/detailsCard.dart';
+import '../../components/progressIndicator/progressIndicator.dart';
 import '../../components/text/text.dart';
 import '../../layout/appbar/appbar.dart';
 import '../../models/product-model/product-model.dart';
@@ -47,11 +48,7 @@ class _DetailsState extends State<Details> {
       appBar: CustomAppBarInPage(title: product.isNotEmpty ? product.first.name : ''),
 
       body:  product.isEmpty && productFetcher.isLoading // API'den veri bekleniyor
-          ? Center(child: LoadingAnimationWidget.twistingDots(
-              leftDotColor: const Color(0xFF61D4AF),
-              rightDotColor: const Color(0xFF673ab7),
-              size: 20,
-            ),)
+          ? IndicatorProgressBar()
           : product.isEmpty // Ürün bulunamadı
                 ? const Center(child: MyText(text: "Ürün bulunamadı"),)
                 :DetailCard(product: product.first),

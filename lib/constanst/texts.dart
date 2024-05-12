@@ -3,11 +3,22 @@ import 'package:get_storage/get_storage.dart';
 class MyTexts {
   static final box = GetStorage();
 
+  static String get userName {
+    final username = box.read("user")['name'] ?? '';
+    //final usersurname = box.read("user")['surname'] ?? '';
+    return '$username';
+  }
+  static String get userSurname {
+    //final username = box.read("user")['name'] ?? '';
+    final usersurname = box.read("user")['surname'] ?? '';
+    return '$usersurname';
+  }
   static String get fullName {
     final username = box.read("user")['name'] ?? '';
     final usersurname = box.read("user")['surname'] ?? '';
     return '$username $usersurname';
   }
+
   static String get email {
     final usermail = box.read("user")['email'] ?? '';
     return '$usermail';
