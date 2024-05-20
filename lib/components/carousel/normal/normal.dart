@@ -1,10 +1,7 @@
-import 'package:elden_kirala/components/text/text.dart';
 import 'package:elden_kirala/constanst/fontSize.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import '../../../constanst/colors.dart';
-import '../../../models/brand-model/brand-model.dart';
 
 class Carousel extends StatefulWidget {
   final List<dynamic> items;

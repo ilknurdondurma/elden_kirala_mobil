@@ -24,6 +24,17 @@ class MyTexts {
     return '$usermail';
   }
 
+  static String get city {
+    final userCity = box.read("user")['city'] ?? '';
+    final userDistrict = box.read("user")['district'] ?? '';
+    return '$userDistrict $userCity';
+  }
+  static String get address {
+    final userCity = box.read("user")['fullAddress'] ?? '';
+    return '$userCity';
+  }
+
+
   static const String appBarTitle = "Welcome";
   static const String categories = "Tüm Kategoriler";
   static const String search = "Aramak istediğiniz şeyi girin..";
