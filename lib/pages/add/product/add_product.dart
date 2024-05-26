@@ -28,25 +28,19 @@ class _AddProductState extends State<AddProduct> {
   late List subCategories = [];
   late Fetcher brandFetcher;
   late Fetcher categoryFetcher;
-
   late String userId = box.read('user')['id'].toString();
-
   final headerController = TextEditingController();
   final descriptionController = TextEditingController();
   final minRentalController = TextEditingController();
   final maxRentalController = TextEditingController();
-
-
   List<File?> selectedImages = [];
   String selectedState = '';
-
   final buttonData = [
     { 'id': 1, 'variant': "PurpleOutline", 'label': 'Çok İyi' },
     { 'id': 2, 'variant': "PurpleOutline", 'label': 'İyi' },
     { 'id': 3, 'variant': "PurpleOutline", 'label': 'Orta' },
     { 'id': 4, 'variant': "PurpleOutline", 'label': 'Kötü' },
   ];
-
    int? _selectedCategoryId;
    int? _selectedSubcategoryId;
    int? _selectedBrandId;
@@ -109,15 +103,6 @@ class _AddProductState extends State<AddProduct> {
                     maxLines: 1,
                     textAlign: TextAlign.start,),
                   const SizedBox(height: 5,),
-
-
-
-
-
-
-
-
-
               //dropdownlar
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -322,7 +307,7 @@ class _AddProductState extends State<AddProduct> {
                         child: CustomTextField(
                           width: 0.3,
                           controller: minRentalController,
-                          number: true,
+                          inputType: TextInputType.number,
                           label: "Min Kiralama Süresi",
                           placeholder: "[ 1-18 ]",
                         ),
@@ -332,7 +317,7 @@ class _AddProductState extends State<AddProduct> {
                         child: CustomTextField(
                           width: 0.3,
                           controller: maxRentalController,
-                          number: true,
+                          inputType: TextInputType.number,
                           label: "Max Kiralama Süresi",
                           placeholder: "[ 1-18 ]",
                         ),

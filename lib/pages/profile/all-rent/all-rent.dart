@@ -69,6 +69,13 @@ class _AllRentState extends State<AllRent> {
         isLoading = false;
       });
     } catch (error) {
+      print("İstek sırasında bir hata oluştu: $error");
+      ScaffoldMessenger.of(context,).showSnackBar(
+        SnackBar(
+          content: Text("İstek sırasında bir hata oluştu: $error"),
+          duration: Duration(seconds: 2),
+        ),
+      );
       // Handle error
     }
   }

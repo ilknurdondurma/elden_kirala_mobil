@@ -16,7 +16,7 @@ class _HomeState extends State<NotFounded> {
     return Scaffold(
       //appBar: CustomAppBar(),
       body: Container(
-        child: Text("notfounded"),
+        child: const Text("notfounded"),
       ),
     );
   }

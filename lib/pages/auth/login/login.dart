@@ -66,6 +66,12 @@ class _LoginFormState extends State<LoginForm> {
         _isLoading = false; // Giriş işlemi başladığında isLoading'u true yap
       });
       print("İstek sırasında bir hata oluştu: $e");
+      ScaffoldMessenger.of(context,).showSnackBar(
+        SnackBar(
+          content: Text("Şifren yanlış olabilir "),
+          duration: Duration(seconds: 2),
+        ),
+      );
     }
   }
 
@@ -113,12 +119,6 @@ class _LoginFormState extends State<LoginForm> {
                     onTap: () => Get.offAllNamed("/signup"),
                     child: const Text(
                       "Hesabın Yok mu ? Hemen Üye ol",
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () => {print(box.read("user"))},
-                    child: const Text(
-                      "bak",
                     ),
                   ),
                 ],

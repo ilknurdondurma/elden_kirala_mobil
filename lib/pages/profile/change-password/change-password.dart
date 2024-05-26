@@ -41,6 +41,12 @@ class _ChangePasswordState extends State<ChangePassword> {
         dio.Response response = await Api.updateUser(userId,updatedPass);
         if ( response.statusCode==200){
           print("İstek başarıyla gönderildi. Yanıt: ${response.data}");
+          ScaffoldMessenger.of(context,).showSnackBar(
+            SnackBar(
+              content: Text("Şifre başarıyla değiştirildi."),
+              duration: Duration(seconds: 2),
+            ),
+          );
           Map <String , dynamic> responseData = response.data['data'];
           await box.write('user', responseData);
           Get.reload();
@@ -49,6 +55,12 @@ class _ChangePasswordState extends State<ChangePassword> {
       }
       catch (e) {
         print("İstek sırasında bir hata oluştu: $e");
+        ScaffoldMessenger.of(context,).showSnackBar(
+          SnackBar(
+            content: Text("İstek sırasında bir hata oluştu: $e"),
+            duration: Duration(seconds: 2),
+          ),
+        );
       }
     }
   }

@@ -23,50 +23,19 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   final List<Map<String, String>> buttonData = [
-    {
-      'id': "1",
-      'variant': "PurpleOutline",
-      'label': 'Şifre Değiştir',
-      'route': '/change-password'
-    },
+    {'id': "1", 'variant': "PurpleOutline", 'label': 'Şifre Değiştir', 'route': '/change-password'},
     //{ 'id': 2, 'variant': "PurpleOutline", 'label': 'Tüm Kiralamalarım','route':'' },
     // { 'id': 3, 'variant': "PurpleOutline", 'label': 'Ürün & Satıcı Yorumlarım','route':'' },
-    {
-      'id': "4",
-      'variant': "PurpleOutline",
-      'label': 'Bildirim Tercihlerim',
-      'route': '/notification'
-    },
-    {
-      'id': "5",
-      'variant': "PurpleOutline",
-      'label': 'Adres Düzenle',
-      'route': '/addresess'
-    },
-    {
-      'id': "6",
-      'variant': "PurpleOutline",
-      'label': 'Güvenlik',
-      'route': '/security'
-    },
-    {
-      'id': "7",
-      'variant': "PurpleOutline",
-      'label': 'Hesap Ayarlarım',
-      'route': '/account'
-    },
-    {
-      'id': "8",
-      'variant': "PurpleOutline",
-      'label': 'Çıkış Yap',
-      'route': '/login'
-    },
+    {'id': "4", 'variant': "PurpleOutline", 'label': 'Bildirim Tercihlerim', 'route': '/notification'},
+    {'id': "5", 'variant': "PurpleOutline", 'label': 'Adres Düzenle', 'route': '/addresess'},
+    {'id': "6", 'variant': "PurpleOutline", 'label': 'Güvenlik', 'route': '/security'},
+    //{'id': "7", 'variant': "PurpleOutline", 'label': 'Hesap Ayarlarım', 'route': '/account'},
+    {'id': "8", 'variant': "PurpleOutline", 'label': 'Çıkış Yap', 'route': '/login'},
   ];
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _userNameController = TextEditingController(text: MyTexts.userName);
   final TextEditingController _userSurnameController = TextEditingController(text: MyTexts.userSurname);
   final TextEditingController _emailController = TextEditingController(text: MyTexts.email);
-  final AuthController _authController = Get.find();
 
   final int userId = box.read("user")['id'];
   final String userPassword = box.read("user")['password'];
@@ -85,6 +54,12 @@ class _ProfileState extends State<Profile> {
       dio.Response response = await Api.updateUser(userId, updatedUser);
       if (response.statusCode == 200) {
         print("İstek başarıyla gönderildi. Yanıt: ${response.data}");
+        ScaffoldMessenger.of(context,).showSnackBar(
+          SnackBar(
+            content: Text("Kullanıcı başarıyla gümcellendi"),
+            duration: Duration(seconds: 2),
+          ),
+        );
         Map<String, dynamic> responseData = response.data['data'];
         await box.write('user', responseData);
         print(box.read('user'));
@@ -92,6 +67,12 @@ class _ProfileState extends State<Profile> {
       }
     } catch (e) {
       print("İstek sırasında bir hata oluştu: $e");
+      ScaffoldMessenger.of(context,).showSnackBar(
+        SnackBar(
+          content: Text("İstek sırasında bir hata oluştu: $e"),
+          duration: Duration(seconds: 2),
+        ),
+      );
     }
   }
 

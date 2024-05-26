@@ -129,7 +129,13 @@ class _ProductCommentsState extends State<ProductComments> {
                   () => Api.getProductsById(rental.productId, userId));
           await productsFetcher.fetchData();
         } catch (error) {
-          // Handle error
+          print("İstek sırasında bir hata oluştu: $error");
+          ScaffoldMessenger.of(context,).showSnackBar(
+            SnackBar(
+              content: Text("İstek sırasında bir hata oluştu: $error"),
+              duration: Duration(seconds: 2),
+            ),
+          );
         }
       }).toList();
 

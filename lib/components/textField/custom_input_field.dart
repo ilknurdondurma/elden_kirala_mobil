@@ -9,7 +9,7 @@ class CustomTextField extends StatefulWidget {
   final Function(String?)? onChanged;
   final Function(String?)? validator;
   final String? placeholder;
-  final bool number;
+  final TextInputType? inputType;
   final bool? isBorder;
   final bool? obscureText;
   final Icon? icon;
@@ -22,7 +22,7 @@ class CustomTextField extends StatefulWidget {
     Key? key,
     required this.controller,
     this.placeholder = "",
-    this.number = false,
+    this.inputType,
     this.label = "",
     this.maxLines = 1,
     this.width = 1,
@@ -69,7 +69,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
                   widget.onChanged!(value);
                 }
               },
-              keyboardType: widget.number ? TextInputType.number : null,
+              //keyboardType: widget.number ? TextInputType.number : null,
+              keyboardType: widget.inputType,
               maxLines: widget.maxLines,
               controller: widget.controller,
               decoration: InputDecoration(
