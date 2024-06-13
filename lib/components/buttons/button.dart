@@ -1,15 +1,14 @@
 import 'package:elden_kirala/constanst/colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Button extends StatelessWidget{
+class CustomButton extends StatelessWidget{
   final VoidCallback onPressed;
   final String label;
   final String? variant;
   final String? size;
   final Widget? child;
 
-  const Button({
+  const CustomButton({
     super.key,
     required this.onPressed,
     required this.label,

@@ -63,6 +63,8 @@ class Api {
   static getBrandByCategoryId(cid) => dio.get('$baseUrl/Brand/get/$cid');
 
   static getCommentById(pid) => dio.get('$baseUrl/Comment/get/$pid');
+  static getCommentByUserId(uid) => dio.get('$baseUrl/Comment/get-byuser/$uid');
+  static addComment(comment) => dio.post('$baseUrl/Comment/add',data:comment ,options: optionsAuth);
 
   static getAllFavorites(uid) => dio.get('$baseUrl/Product/get-favori/$uid',options: optionsAuth);
   static addFavorite(jsonData) => dio.post('$baseUrl/Favorite/add',data:jsonData , options: optionsAppJsonandToken);

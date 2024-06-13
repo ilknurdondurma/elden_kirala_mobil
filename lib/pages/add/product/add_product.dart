@@ -342,7 +342,7 @@ class _AddProductState extends State<AddProduct> {
                           itemCount: buttonData.length,
                           itemBuilder: (context, index) {
                             final button = buttonData[index];
-                            return Button(
+                            return CustomButton(
                               label: button['label'].toString(),
                               onPressed: () {
                                 setState(() {
@@ -406,7 +406,7 @@ Container buildBottomBar(BuildContext context) {
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
-              Button(
+              CustomButton(
                 label: 'Ürünü Ekle',
                 onPressed: () { },
                 size: 'xsmall',

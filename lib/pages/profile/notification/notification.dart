@@ -98,7 +98,7 @@ class _NotificationState extends State<Notification> {
                     },
                   ),
                   SizedBox(height: 20,),
-                  Button(
+                  CustomButton(
                     onPressed: _handleSubmit,
                     label: "Güncelle",
                     variant: "Green",

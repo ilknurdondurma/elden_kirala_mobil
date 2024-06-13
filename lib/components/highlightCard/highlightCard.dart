@@ -30,7 +30,7 @@ class HighlightCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Button(
+            CustomButton(
               onPressed: () {
                 print("bastı");
                 Get.toNamed('/highlights');

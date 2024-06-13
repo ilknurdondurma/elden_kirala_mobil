@@ -331,7 +331,7 @@ class _DetailCardState extends State<DetailCard> {
                                 fontSize: MyFontSizes.fontSize_1(context),
                                 fontWeight: FontWeight.bold,
                               ),),
-                              Button(
+                              CustomButton(
                                 label: '${widget.product.status}',
                                 onPressed: () {  },
                                 size: 'xsmall',
@@ -346,7 +346,7 @@ class _DetailCardState extends State<DetailCard> {
                                   fontSize: MyFontSizes.fontSize_1(context),
                                   fontWeight: FontWeight.bold,
                                 ),),
-                              Button(
+                              CustomButton(
                                 label: ' ${widget.product.minRentalPeriod}  Ay',
                                 onPressed: () {  },
                                 size: 'xsmall',
@@ -361,7 +361,7 @@ class _DetailCardState extends State<DetailCard> {
                                    fontSize: MyFontSizes.fontSize_1(context),
                                    fontWeight: FontWeight.bold,
                                  ),),
-                              Button(
+                              CustomButton(
                                 label: '${widget.product.maxRentalPeriod}  Ay ',
                                 onPressed: () {  },
                                 size: 'xsmall',
@@ -445,7 +445,7 @@ class _DetailCardState extends State<DetailCard> {
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: [
-                  Button(
+                  CustomButton(
                     label: 'Satıcıya Sor',
                     onPressed: () {  },
                     size: 'small',

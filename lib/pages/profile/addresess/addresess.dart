@@ -131,7 +131,7 @@ class _AddresessState extends State<Addresess> {
                                   ],
                                 ),
                                 CustomTextField(controller: address,width: 0.8,),
-                                Button(
+                                CustomButton(
                                   onPressed: _handleSubmit,
                                   label: "Güncelle",
                                   variant: "Green",

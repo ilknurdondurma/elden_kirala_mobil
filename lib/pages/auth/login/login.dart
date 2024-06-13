@@ -97,7 +97,7 @@ class _LoginFormState extends State<LoginForm> {
                   CustomTextField(controller: _emailController,label: "Email",),
                   CustomTextField(controller: _passwordController , label: "Password",),
                   const SizedBox(height: 20),
-                  Button(
+                  CustomButton(
                     onPressed: _isLoading
                         ? () {}
                         : () {

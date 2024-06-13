@@ -123,7 +123,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         },
                       ),
                     ),
-                    Button(
+                    CustomButton(
                       onPressed: _handleSubmit,
                       label: "Kaydet",
                       variant: "Green",

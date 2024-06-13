@@ -99,7 +99,7 @@ class _SignupFormState extends State<SignupForm> {
                 CustomTextField(controller: _emailController, label: "Email",),
                 CustomTextField(controller: _passwordController, label: "Şifre",),
                 const SizedBox(height: 20.0),
-                Button(
+                CustomButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
                       // Kaydetme işlemi

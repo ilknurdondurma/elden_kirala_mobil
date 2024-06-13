@@ -1,12 +1,16 @@
 import 'dart:convert';
-
-import 'package:elden_kirala/constanst/colors.dart';
-import 'package:elden_kirala/constanst/fontSize.dart';
-import 'package:flutter/material.dart';
+import 'package:dio/dio.dart' as dio;
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import 'package:elden_kirala/components/buttons/button.dart';
+import 'package:elden_kirala/constanst/colors.dart';
+import 'package:elden_kirala/constanst/fontSize.dart';
+import 'package:flutter/material.dart';
+
+
 import '../../../api/api.dart';
+import '../../../components/modal/modal.dart';
 import '../../../components/progressIndicator/progressIndicator.dart';
 import '../../../components/textField/custom_input_field.dart';
 import '../../../constanst/containerSizes.dart';
@@ -154,64 +158,8 @@ class _AllRentState extends State<AllRent> {
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: Container(
-                              width: MyContainerSizes.widthSize(context, 0.9),
-                              child: CustomTextField(
-                                controller: _searchController,
-                                //onChanged: (keyword) => searchRentals(_searchController.text),
-                                placeholder: MyTexts.search,
-                                label: "Ürün İsmi veya Marka ara",
-                                isBorder: true,
-                                icon: const Icon(
-                                  Icons.search,
-                                  size: 15,
-                                ),
-                                width: 1,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
-                                children: List.generate(
-                                  buttonData.length,
-                                      (index) => GestureDetector(
-                                    onTap: () => filterStatus(index),
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16, vertical: 8),
-                                      margin: const EdgeInsets.only(right: 8),
-                                      decoration: BoxDecoration(
-                                        color: selectedButtonIndex == index
-                                            ? MyColors.primary
-                                            : MyColors.tertiary,
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          Icon(
-                                            Icons.card_travel,
-                                            size: 17,
-                                          ),
-                                          Text(
-                                            buttonData[index]["name"] as String,
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize:
-                                                MyFontSizes.fontSize_0(context)),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+                          searchButton(context),
+                          filterButtons(context),
                           GridView.builder(
                             shrinkWrap: true,
                             physics: const NeverScrollableScrollPhysics(),
@@ -305,23 +253,29 @@ class _AllRentState extends State<AllRent> {
                                                           : Colors.red,
                                                       fontWeight: FontWeight.bold),
                                                 ),
-                                                Text(
-                                                  " ${rental.productId}",
-                                                  style: TextStyle(
-                                                      color:
-                                                      rental.paymentStatus == true
-                                                          ? MyColors.primary
-                                                          : Colors.red,
-                                                      fontWeight: FontWeight.bold),
-                                                ),
+
                                               ],
                                             ),
                                             Row(
                                               children: [
                                                 GestureDetector(
-                                                  onTap:()=>goDetailHandle(rental.productId),
+                                                  onTap:()=>{
+                                                    showModalBottomSheet(
+                                                      context: context,
+                                                      builder: (BuildContext context) {
+                                                        return MyModal(
+                                                          name: product!.name,
+                                                          productId: rental.productId!,
+                                                          userId: userId,
+                                                          imageUrl1: product.filE_URL_1!,
+                                                          imageUrl2: product.filE_URL_2!,
+                                                          imageUrl3: product.filE_URL_3!,
+                                                        );
+                                                      },
+                                                    )
+                                                  },
                                                   child: Text(
-                                                    "Detaylar",
+                                                    "Değerlendir",
                                                     style: TextStyle(
                                                         fontSize:
                                                         MyFontSizes.fontSize_1(
@@ -349,29 +303,32 @@ class _AllRentState extends State<AllRent> {
                                             SizedBox(
                                               height: 10,
                                             ),
-                                            SizedBox(
-                                              height: MyContainerSizes.heightSize(
-                                                  context, 0.08),
-                                              child: product.filE_URL_1!= null
-                                                  ? Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                                children: [
-                                                  Image.memory(
+                                            GestureDetector(
+                                              onTap: ()=>goDetailHandle(product.productId),
+                                              child: SizedBox(
+                                                height: MyContainerSizes.heightSize(
+                                                    context, 0.08),
+                                                child: product.filE_URL_1!= null
+                                                    ? Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                                  children: [
+                                                    Image.memory(
+                                                        base64Decode(
+                                                            product.filE_URL_1!),
+                                                        fit: BoxFit.cover),
+                                                    SizedBox(
+                                                      width: 20,
+                                                    ),
+                                                    Image.memory(
                                                       base64Decode(
-                                                          product.filE_URL_1!),
-                                                      fit: BoxFit.cover),
-                                                  SizedBox(
-                                                    width: 20,
-                                                  ),
-                                                  Image.memory(
-                                                    base64Decode(
-                                                        product.filE_URL_2!),
-                                                    fit: BoxFit.cover,
-                                                  ),
-                                                ],
-                                              )
-                                                  : Placeholder(),
+                                                          product.filE_URL_2!),
+                                                      fit: BoxFit.cover,
+                                                    ),
+                                                  ],
+                                                )
+                                                    : Placeholder(),
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -392,4 +349,69 @@ class _AllRentState extends State<AllRent> {
       ),
     );
   }
+
+  Padding filterButtons(BuildContext context) {
+    return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              children: List.generate(
+                                buttonData.length,
+                                    (index) => GestureDetector(
+                                  onTap: () => filterStatus(index),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 8),
+                                    margin: const EdgeInsets.only(right: 8),
+                                    decoration: BoxDecoration(
+                                      color: selectedButtonIndex == index
+                                          ? MyColors.primary
+                                          : MyColors.tertiary,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.card_travel,
+                                          size: 17,
+                                        ),
+                                        Text(
+                                          buttonData[index]["name"] as String,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize:
+                                              MyFontSizes.fontSize_0(context)),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+  }
+
+  Padding searchButton(BuildContext context) {
+    return Padding(
+                          padding: const EdgeInsets.only(bottom: 8),
+                          child: Container(
+                            width: MyContainerSizes.widthSize(context, 0.9),
+                            child: CustomTextField(
+                              controller: _searchController,
+                              //onChanged: (keyword) => searchRentals(_searchController.text),
+                              placeholder: MyTexts.search,
+                              label: "Ürün İsmi veya Marka ara",
+                              isBorder: true,
+                              icon: const Icon(
+                                Icons.search,
+                                size: 15,
+                              ),
+                              width: 1,
+                            ),
+                          ),
+                        );
+  }
 }
+

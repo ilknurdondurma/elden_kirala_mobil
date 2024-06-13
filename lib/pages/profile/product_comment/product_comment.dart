@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 
 import '../../../api/api.dart';
+import '../../../components/modal/modal.dart';
 import '../../../components/progressIndicator/progressIndicator.dart';
 import '../../../components/stars/stars.dart';
 import '../../../constanst/colors.dart';
@@ -121,7 +122,7 @@ class _ProductCommentsState extends State<ProductComments> {
   Future<void> fetchData() async {
     try {
       commentFetcher = Fetcher(
-          Comment.fromJson, _setComments, () => Api.getCommentById(62));
+          Comment.fromJson, _setComments, () => Api.getCommentByUserId(userId));
       await commentFetcher.fetchData();
       List<Future<void>> fetchProductsFutures = comments.map((rental) async {
         try {
@@ -197,57 +198,75 @@ class _ProductCommentsState extends State<ProductComments> {
                   //final product = findProductForRental(rental);
                   DateTime date = DateTime.parse('${comment.createdDate}');
                   final createdDate=formatDate(date);
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: MyColors.tertiary.withOpacity(0.1),
-                      border:
-                      Border.all(width: 1, color: MyColors.tertiary),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            flex: 1, // 3'te 1 genişlik
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.memory(
-                                base64Decode(product!.filE_URL_1!),
-                                fit: BoxFit.cover,
+                  return GestureDetector(
+                    onTap:(){
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return MyModal(
+                            name: product!.name,
+                            productId: comment.productId!,
+                            userId: userId,
+                            imageUrl1: product.filE_URL_1!,
+                            imageUrl2: product.filE_URL_2!,
+                            imageUrl3: product.filE_URL_3!,
+                            text:comment.commentContent
+                          );
+                        },
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: MyColors.tertiary.withOpacity(0.1),
+                        border:
+                        Border.all(width: 1, color: MyColors.tertiary),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              flex: 1, // 3'te 1 genişlik
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image.memory(
+                                  base64Decode(product!.filE_URL_1!),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                          Expanded(
-                            flex: 2, // 3'te 2 genişlik
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      "${product.brandName}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: MyFontSizes.fontSize_0(context)),maxLines: 2,
-                                    ),
-                                    Text(
-                                      createdDate,style: TextStyle(fontSize: MyFontSizes.fontSize_0(context)),maxLines: 2,
-                                    ),
-                                  ],
-                                ),
-                                Text(
-                                  product.name,style: TextStyle(fontSize: MyFontSizes.fontSize_0(context)),maxLines: 2,
-                                ),
-                                CreateStar(rate: comment.userRating!.toDouble(),size: 15,),
-                                Text(
-                                  "${comment.commentContent}",style: TextStyle(fontSize: MyFontSizes.fontSize_0(context),color: Colors.black54),maxLines: 2,
-                                ),
+                            Expanded(
+                              flex: 2, // 3'te 2 genişlik
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        "${product.brandName}",style: TextStyle(fontWeight: FontWeight.bold,fontSize: MyFontSizes.fontSize_0(context)),maxLines: 2,
+                                      ),
+                                      Text(
+                                        createdDate,style: TextStyle(fontSize: MyFontSizes.fontSize_0(context)),maxLines: 2,
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                    product.name,style: TextStyle(fontSize: MyFontSizes.fontSize_0(context)),maxLines: 2,
+                                  ),
+                                  CreateStar(rate: comment.userRating!.toDouble(),size: 15,),
+                                  Text(
+                                    "${comment.commentContent}",style: TextStyle(fontSize: MyFontSizes.fontSize_0(context),color: Colors.black54),maxLines: 2,
+                                  ),
 
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
 
+                      ),
                     ),
                   );
                 }),
