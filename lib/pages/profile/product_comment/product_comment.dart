@@ -1,10 +1,12 @@
 import 'dart:convert';
 
+import 'package:elden_kirala/constanst/containerSizes.dart';
 import 'package:elden_kirala/constanst/fontSize.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-
+import 'package:dio/dio.dart' as dio;
 import '../../../api/api.dart';
+import 'package:get/get.dart';
 import '../../../components/modal/modal.dart';
 import '../../../components/progressIndicator/progressIndicator.dart';
 import '../../../components/stars/stars.dart';
@@ -172,24 +174,56 @@ class _ProductCommentsState extends State<ProductComments> {
   }
   Product? findProductForComment(Comment comment) {
     for (Product product in products) {
-      if (product.productId == comment.productId) {
+      if (product.id == comment.productId) {
         return product;
       }
     }
     return null;
   }
 
+
+  handleDeleteComment(int? commentId) async {
+    try {
+      dio.Response response = await Api.deleteComment(commentId);
+      if (response.statusCode == 200) {
+        print("İstek başarıyla gönderildi. Yanıt: ${response.data}");
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('İşlem başarıyla gerçekleştirildi.'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+        await Future.delayed(const Duration(seconds: 2));
+        Get.back();
+
+      }
+      else if (response.statusCode == 400 ||
+          response.statusCode == 401 ||
+          response.statusCode == 42 ||
+          response.statusCode == 415) {
+        print('auth hatası');
+        Get.offAllNamed('/login');
+      } else {
+        print('silinirken bir hata oluştu');
+      }
+    } catch (e) {
+      print("İstek sırasında bir hata oluştu: $e");
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    final double hayt=MyContainerSizes.heightSize(context, 0.2);
     return isLoading // Show loading indicator while products are loading
         ? const IndicatorProgressBar()
         : SingleChildScrollView(
             child: GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 1,
-                    mainAxisExtent: 150,
+                    mainAxisExtent: hayt,
                     mainAxisSpacing: 20),
                 itemCount: comments.length,
                 itemBuilder: (context, index) {
@@ -204,6 +238,8 @@ class _ProductCommentsState extends State<ProductComments> {
                         context: context,
                         builder: (BuildContext context) {
                           return MyModal(
+                            isUpdate: true,
+                            id:comment.id!,
                             name: product!.name,
                             productId: comment.productId!,
                             userId: userId,
@@ -250,6 +286,7 @@ class _ProductCommentsState extends State<ProductComments> {
                                       Text(
                                         createdDate,style: TextStyle(fontSize: MyFontSizes.fontSize_0(context)),maxLines: 2,
                                       ),
+                                      IconButton(icon: Icon(Icons.delete), iconSize: 15, color: Colors.red, onPressed:()=>handleDeleteComment(comment.id))
                                     ],
                                   ),
                                   Text(

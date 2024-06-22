@@ -91,7 +91,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: CustomTextField(
                         controller: _password,
-                        //placeholder: "Yeni şifre",
+                        placeholder: "Yeni şifre",
                         label: "Yeni Şifre",
                         obscureText: true,
                         validator: (value) {

@@ -12,7 +12,7 @@ class ProductContainer extends StatelessWidget {
   const ProductContainer({super.key, required this.product});
 
   goDetailHandle() {
-    product.productId==0 ?Get.toNamed('/detail/${product.id}'):Get.toNamed('/detail/${product.productId}');
+   Get.toNamed('/detail/${product.id}');
 
   }
 

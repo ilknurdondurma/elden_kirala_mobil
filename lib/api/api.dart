@@ -8,8 +8,7 @@ class Api {
   static Dio dio = Dio();
 
   static const String baseUrl = 'http://10.0.2.2:5058/api/v2';
-  static String token=box.read('user')['token'].toString();
-
+  static String token=box.read("user")["token"];
   //--------token
   static Options optionsAuth = Options(
       headers: {
@@ -43,11 +42,14 @@ class Api {
 
 
   static login(formData) => dio.post('$baseUrl/User/login/', data: formData);
-  //static const String signUp = '$baseUrl/User/sign-up';
+  static signUp(formdata) => dio.post('$baseUrl/User/sign-up', data:formdata);
   static  updateUser(userId,updatedUser) => dio.put('$baseUrl/User/update/$userId',data: updatedUser);
 
   static getAllProducts(userId) => dio.get('$baseUrl/Product/get-all/$userId');
   static getHighlights(userId) => dio.get('$baseUrl/Product/get-highlights/$userId');
+  static getHighlightsByCategory(userId,categoryId) => dio.get('$baseUrl/Product/get-highlights-category/$userId/$categoryId');
+  static getHighlightsByBrand(userId ,brandId) => dio.get('$baseUrl/Product/get-highlights-brand/$userId/$brandId');
+
   static getProductsByCategoryId(catId) => dio.get('$baseUrl/Product/get-category/$catId');
   static getProductsByBrandId(brId) => dio.get('$baseUrl/Product/get-brand/$brId');
   static getProductsById(pid,uid) => dio.get('$baseUrl/Product/get/$pid/$uid');
@@ -62,9 +64,11 @@ class Api {
   static getAllBrand() => dio.get('$baseUrl/Brand/get-all');
   static getBrandByCategoryId(cid) => dio.get('$baseUrl/Brand/get/$cid');
 
-  static getCommentById(pid) => dio.get('$baseUrl/Comment/get/$pid');
-  static getCommentByUserId(uid) => dio.get('$baseUrl/Comment/get-byuser/$uid');
+  static getCommentById(pid) => dio.get('$baseUrl/Comment/get-by-product/$pid');
+  static getCommentByUserId(uid) => dio.get('$baseUrl/Comment/get-by-user/$uid');
   static addComment(comment) => dio.post('$baseUrl/Comment/add',data:comment ,options: optionsAuth);
+  static updateComment(comment) => dio.put('$baseUrl/Comment/update',data:comment ,options: optionsAuth);
+  static deleteComment(id) => dio.delete('$baseUrl/Comment/delete/$id',options: optionsAuth);
 
   static getAllFavorites(uid) => dio.get('$baseUrl/Product/get-favori/$uid',options: optionsAuth);
   static addFavorite(jsonData) => dio.post('$baseUrl/Favorite/add',data:jsonData , options: optionsAppJsonandToken);

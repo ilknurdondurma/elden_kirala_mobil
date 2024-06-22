@@ -48,9 +48,10 @@ class _HighlightsState extends State<Highlights> {
 
   void _setProducts(List<dynamic> data) {
     setState(() {
-      products = data.cast<Product>().where((product) => product.isHighlight == true).toList(); // Product tipine dönüştürme
+      products = data.cast<Product>(); // Product tipine dönüştürme
     });
   }
+  //.where((product) => product.isHighlight == true)
 
   void _setBrands(List<dynamic> data) {
     setState(() {
@@ -69,7 +70,7 @@ class _HighlightsState extends State<Highlights> {
       productFetcher = Fetcher(Product.fromJson, _setProducts, () => Api.getHighlights(userId));
     }
     else {
-      productFetcher = Fetcher(Product.fromJson, _setProducts, () => Api.getProductsByCategoryId(categoryId));
+      productFetcher = Fetcher(Product.fromJson, _setProducts, () => Api.getHighlightsByCategory(userId, categoryId));
     }
     productFetcher.fetchData();
   }
@@ -79,7 +80,7 @@ class _HighlightsState extends State<Highlights> {
       productFetcher = Fetcher(Product.fromJson, _setProducts, () => Api.getHighlights(userId));
     }
     else {
-      productFetcher = Fetcher(Product.fromJson, _setProducts, () => Api.getProductsByBrandId(brandId));
+      productFetcher = Fetcher(Product.fromJson, _setProducts, () => Api.getHighlightsByBrand(userId , brandId));
     }
     productFetcher.fetchData();
   }

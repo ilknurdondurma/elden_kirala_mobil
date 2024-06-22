@@ -58,12 +58,12 @@ class _DetailCardState extends State<DetailCard> {
     try {
       print(box.read('user')['id']);
       var userId=box.read('user')['id'];
-      print(widget.product.productId);
-      var productId=widget.product.productId;
+      print(widget.product.id);
+      var productId=widget.product.id;
 
       Map<String, dynamic> jsonData = {
         'userId': userId,
-        'productId': productId,
+        'productId': productId
       };
 
       dio.Response response;
@@ -110,7 +110,7 @@ class _DetailCardState extends State<DetailCard> {
     return Scaffold(
         body: SingleChildScrollView(
           controller: _controller,
-          child: widget.product.productId == null || widget.product.productId == 0
+          child: widget.product.id == null
               ? Center(child: LoadingAnimationWidget.twistingDots(
                   leftDotColor: const Color(0xFF61D4AF),
                   rightDotColor: const Color(0xFF673ab7),
@@ -380,7 +380,7 @@ class _DetailCardState extends State<DetailCard> {
                         children: [
                           Text("ÜRÜN DEĞERLENDİRMELERİ",style: TextStyle(fontSize: MyFontSizes.fontSize_2(context)),),
                           const SizedBox(height: 20,),
-                          CommentCard(productId: widget.product.productId)
+                          CommentCard(productId: widget.product.id)
                         ],
 
                       ),

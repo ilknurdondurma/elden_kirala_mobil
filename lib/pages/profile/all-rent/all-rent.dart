@@ -86,7 +86,7 @@ class _AllRentState extends State<AllRent> {
 
   Product? findProductForRental(Rental rental) {
     for (Product product in products) {
-      if (product.productId == rental.productId) {
+      if (product.id == rental.productId) {
         return product;
       }
     }
@@ -264,6 +264,7 @@ class _AllRentState extends State<AllRent> {
                                                       context: context,
                                                       builder: (BuildContext context) {
                                                         return MyModal(
+                                                          isUpdate: false,
                                                           name: product!.name,
                                                           productId: rental.productId!,
                                                           userId: userId,
@@ -304,7 +305,7 @@ class _AllRentState extends State<AllRent> {
                                               height: 10,
                                             ),
                                             GestureDetector(
-                                              onTap: ()=>goDetailHandle(product.productId),
+                                              onTap: ()=>goDetailHandle(product.id),
                                               child: SizedBox(
                                                 height: MyContainerSizes.heightSize(
                                                     context, 0.08),
