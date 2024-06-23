@@ -380,7 +380,9 @@ class _ProfileState extends State<Profile> {
   }
 
   Padding buildGridView(BuildContext context) {
+    final AuthController _authController = Get.find();
     return Padding(
+
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Container(
                         width: MyContainerSizes.widthSize(context, 0.9),
@@ -484,7 +486,12 @@ class _ProfileState extends State<Profile> {
                                                   MyFontSizes.fontSize_0(
                                                       context)),
                                             ),
-                                            onPressed: () {
+                                            onPressed: () async {
+                                              if(button["id"]=="8"){
+                                                _authController.logout() ;
+                                              await box.remove('user');
+                                              Get.offAllNamed("/login");
+                                              }
                                              Get.toNamed(button['route']!);
                                             },
                                             //size: 'xsmall',

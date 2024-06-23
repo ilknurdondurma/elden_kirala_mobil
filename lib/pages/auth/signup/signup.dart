@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:elden_kirala/components/buttons/button.dart';
-import 'package:elden_kirala/components/dropdown/dropdown.dart';
 import 'package:elden_kirala/components/textField/custom_input_field.dart';
 import 'package:elden_kirala/constanst/fontSize.dart';
 import 'package:elden_kirala/constanst/texts.dart';
 import 'package:elden_kirala/layout/appbar/appbar.dart';
 import 'package:country_state_city_picker/country_state_city_picker.dart';
+
+import 'package:dio/dio.dart' as dio;
+import 'package:get_storage/get_storage.dart';
+import 'package:get/get.dart';
+import '../../../api/api.dart';
+import '../../../controller/auth-controller/auth-controller.dart';
+final box = GetStorage();
 
 class SignupPage extends StatelessWidget {
   const SignupPage({super.key});
@@ -34,12 +39,50 @@ class _SignupFormState extends State<SignupForm> {
   final _passwordController = TextEditingController();
   final _usernameController = TextEditingController();
   final _usersurnameController = TextEditingController();
-  final _userCityController = TextEditingController();
-  final _userDistrictController = TextEditingController();
 
   late final String countryValue;
   late final String stateValue;
   late final String cityValue;
+  late final AuthController _authController;
+
+
+  Future<void> handleSubmit() async {
+
+    try {
+      print("city"+cityValue);
+      print("dist"+stateValue);
+
+
+      var user={
+        "name":_usernameController.text,
+        "surname":_usersurnameController.text,
+        "password":_passwordController.text,
+        "email":_emailController.text,
+        "rating":5.0,
+        "city":cityValue,
+        "district":stateValue,
+        "userType":"Kiracı",
+        "fullAddress":""
+      };
+
+      dio.Response response = await Api.signUp(user);
+      if (response.statusCode == 200) {
+        print("İstek başarıyla gönderildi. Yanıt: ${response.data}");
+        Map<String, dynamic> responseData = response.data['data'];
+        await box.write('user', responseData);
+        print(box.read('user'));
+        Get.offAllNamed("/");
+      }
+    } catch (e) {
+      print("İstek sırasında bir hata oluştu");
+      ScaffoldMessenger.of(context,).showSnackBar(
+        SnackBar(
+          content: Text("error "),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,13 +101,7 @@ class _SignupFormState extends State<SignupForm> {
                 const SizedBox(height: 30,),
                 CustomTextField(controller: _usernameController, label: "Adınız",),
                 CustomTextField(controller: _usersurnameController, label: "Soyadınız",),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
 
-                    CustomTextField(controller: _userDistrictController, label: "İlçe", width: 0.4,),
-                  ],
-                ),
                 Column(
                   children: [
                     SelectState(
@@ -101,9 +138,7 @@ class _SignupFormState extends State<SignupForm> {
                 const SizedBox(height: 20.0),
                 CustomButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      // Kaydetme işlemi
-                    }
+                    if (_formKey.currentState!.validate()) handleSubmit();
                   },
                   label: "Üye Ol",
                   size: "normal",

@@ -18,7 +18,9 @@ class Api {
 
   //--------formdata
   static Options optionsFormData = Options(
-    contentType: 'multipart/form-data',
+    headers: {
+      'Content-Type': 'multipart/form-data', // Header'a token ekleniyor
+    }
   );
 
   //--------application/json
@@ -53,7 +55,7 @@ class Api {
   static getProductsByCategoryId(catId) => dio.get('$baseUrl/Product/get-category/$catId');
   static getProductsByBrandId(brId) => dio.get('$baseUrl/Product/get-brand/$brId');
   static getProductsById(pid,uid) => dio.get('$baseUrl/Product/get/$pid/$uid');
-  //static   addProduct => '$baseUrl/Product/add';
+  static addProduct(product) => dio.post('$baseUrl/Product/add',data:product,options: optionsFormData);
   //static   updateProduct => '$baseUrl/Product';
   //static   deleteProduct => '$baseUrl/Product/:id';
   //static   getProductsBySearch => '$baseUrl/Product/category/:name';
