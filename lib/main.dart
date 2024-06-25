@@ -1,4 +1,6 @@
 
+import 'dart:io';
+
 import 'package:bottom_navy_bar/bottom_navy_bar.dart';
 import 'package:elden_kirala/constanst/colors.dart';
 import 'package:elden_kirala/constanst/fontFamily.dart';
@@ -14,9 +16,16 @@ import 'package:get_storage/get_storage.dart';
 import 'constanst/icons.dart';
 import 'controller/auth-controller/auth-controller.dart';
 import 'layout/appbar/appbar.dart';
-
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+  }
+}
 void main() async{
-  WidgetsFlutterBinding.ensureInitialized(); // Eklenmesi gereken bir satır
+  WidgetsFlutterBinding.ensureInitialized();
+  HttpOverrides.global = MyHttpOverrides();// Eklenmesi gereken bir satır
   await GetStorage.init();
   await Get.put(AuthController(),permanent: true);
   final box = GetStorage();
@@ -67,7 +76,7 @@ class _MyAppMainState extends State<MyAppMain> {
       appBar: _currentIndex != 3 ? CustomAppBar() :null ,
       extendBodyBehindAppBar: false,
       body: _screens[_currentIndex],
-      floatingActionButton: _currentIndex != 3
+      floatingActionButton: _currentIndex != 3 && _currentIndex != 1
         ? FloatingActionButton(
           onPressed: ()=>Get.toNamed('/add-product'),
           backgroundColor: MyColors.secondary,

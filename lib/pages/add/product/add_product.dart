@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:elden_kirala/constanst/containerSizes.dart';
 import 'package:elden_kirala/layout/appbar/appbar.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../../../components/buttons/button.dart';
 import '../../../components/imagePicker/image_picker.dart';
@@ -159,10 +158,10 @@ class _AddProductState extends State<AddProduct> {
         print("İstek başarısız oldu. Durum kodu: ${response.statusCode}");
       }
     }  catch (e) {
-      print("İstek sırasında bir hata oluştu: $e");
+      print("İstek sırasında bir hata oluştu:");
       ScaffoldMessenger.of(context,).showSnackBar(
         SnackBar(
-          content: Text("Şifren yanlış olabilir "),
+          content: Text("İstek sırasında bir hata oluştu"),
           duration: Duration(seconds: 2),
         ),
       );
