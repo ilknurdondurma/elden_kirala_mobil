@@ -80,6 +80,8 @@ class Api {
   //static const String getRentalsByProductId = '$baseUrl/Rental/get-by-product-id/:pid';
   //static const String addRental = '$baseUrl/Rental/add';
 
+  static getMessagesByUserId(uid) => dio.get('$baseUrl/Message/get-by-user/$uid');
+  static getMessagesUserToUser(sid,rid) => dio.get('$baseUrl/Message/get-userto-user/$sid/$rid');
 
 
 }

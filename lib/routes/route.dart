@@ -14,6 +14,7 @@ import 'package:get/get.dart';
 import '../controller/auth-controller/auth-controller.dart';
 
 import '../main.dart';
+import '../pages/messageBox/chat/chatBox.dart';
 import '../pages/profile/account-settings/account-settings.dart';
 import '../pages/profile/addresess/addresess.dart';
 import '../pages/profile/all-rent/all-rent.dart';
@@ -26,6 +27,7 @@ class RouteManager {
   static final List<GetPage> routes = [
     GetPage(name: '/', page: () =>const MyAppMain()),
     GetPage(name: '/detail/:id', page: () => const Details()),
+    GetPage(name: '/chat/:id', page: () => const ChatBox()),
     GetPage(name: '/favorites', page: () => const Favorites()),
     GetPage(name: '/highlights', page: () => Highlights()),
     GetPage(name: '/account', page: () => const AccountSettings()),

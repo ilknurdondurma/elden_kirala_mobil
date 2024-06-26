@@ -1,27 +1,28 @@
-import 'dart:io';
-import 'package:elden_kirala/constanst/colors.dart';
-import 'package:elden_kirala/constanst/containerSizes.dart';
-import 'package:elden_kirala/constanst/fontSize.dart';
 import 'package:elden_kirala/layout/appbar/appbar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:signalr_core/signalr_core.dart';
+import '../../../api/api.dart';
+import '../../../constanst/colors.dart';
+import '../../../constanst/fontSize.dart';
+import '../../../models/message-model/message-model.dart';
+import '../../../services/fetcher.dart';
+final  box = GetStorage();
 
-import '../../components/buttons/button.dart';
-import '../../components/textField/custom_input_field.dart';
-
-final box = GetStorage();
-
-class Message extends StatefulWidget {
-  final product;
-  const Message({super.key, this.product});
+class ChatBox extends StatefulWidget {
+  const ChatBox({super.key});
 
   @override
-  State<Message> createState() => _MessageState();
+  State<ChatBox> createState() => _ChatBoxState();
 }
 
-class _MessageState extends State<Message> {
+class _ChatBoxState extends State<ChatBox> {
+  List<Message> messageList = [];
+  late Fetcher messageFetcher;
+
   final myUserId = box.read('user')['id'];
+  late int receiverUserId = int.parse(Get.parameters['id']!);
   final token = box.read('user')['token'];
   final idController = TextEditingController();
   final descriptionController = TextEditingController();
@@ -32,9 +33,31 @@ class _MessageState extends State<Message> {
   @override
   void initState() {
     super.initState();
+    fetchMessages();
     main(); // Initialize connection and hubConnection in initState
   }
 
+  Future<void> fetchMessages() async {
+    try {
+      messageFetcher = Fetcher(Message.fromJson, _setMessages, () => Api.getMessagesUserToUser(myUserId, receiverUserId));
+      await messageFetcher.fetchData(); // Await to ensure data is fetched
+    } catch (error) {
+      print("Error fetching messages: $error");
+    }
+  }
+
+  void _setMessages(List<dynamic> data) {
+    setState(() {
+      messageList = data.cast<Message>(); // Cast to Message type
+      for (var message in messageList) {
+        messages.add({
+          'text': message.messageContent ?? '',
+          'sender': message.senderId == myUserId ? 'myself' : 'other',
+        });
+      }
+      print('Messages set: $messages'); // Debug print
+    });
+  }
   Future<void> main() async {
     connection = HubConnectionBuilder()
         .withUrl(
@@ -74,7 +97,7 @@ class _MessageState extends State<Message> {
     });
 
     var message = {
-      'receiverId': "12",
+      'receiverId': receiverUserId.toString(),
       'messageContent': descriptionController.text,
     };
 
@@ -91,6 +114,7 @@ class _MessageState extends State<Message> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: CustomAppBarInPage(title: "Sohbet"),
       body: Column(
         children: [
           SizedBox(height: 20,),

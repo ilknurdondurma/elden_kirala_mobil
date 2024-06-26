@@ -447,7 +447,7 @@ class _DetailCardState extends State<DetailCard> {
                 children: [
                   CustomButton(
                     label: 'Satıcıya Sor',
-                    onPressed: () {  },
+                    onPressed: () { Get.toNamed("/chat/${widget.product.userId}"); },
                     size: 'small',
                     variant: 'PurpleOutline',
                   ),

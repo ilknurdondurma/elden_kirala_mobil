@@ -7,7 +7,7 @@ import 'package:elden_kirala/constanst/fontFamily.dart';
 import 'package:elden_kirala/constanst/texts.dart';
 import 'package:elden_kirala/pages/favorites/favorites.dart';
 import 'package:elden_kirala/pages/home/home.dart';
-import 'package:elden_kirala/pages/message/message.dart';
+import 'package:elden_kirala/pages/messageBox/message.dart';
 import 'package:elden_kirala/pages/profile/profile.dart';
 import 'package:flutter/material.dart';
 import 'package:elden_kirala/routes/route.dart';
@@ -68,7 +68,7 @@ class MyAppMain extends StatefulWidget {
 
 class _MyAppMainState extends State<MyAppMain> {
   int _currentIndex = 0;
-  final List _screens = [const Home(),const Message(),const Favorites(),const Profile()];
+  final List _screens = [const Home(),const MessageBox(),const Favorites(),const Profile()];
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
