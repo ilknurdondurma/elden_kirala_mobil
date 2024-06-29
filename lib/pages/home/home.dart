@@ -175,12 +175,7 @@ class _HomeState extends State<Home> {
             ),
             // vitrin
             const HighlightCard(imagePath: "assets/vitrin.jpeg"),
-            GestureDetector(
-              onTap: () => {print(box.read("user"))},
-              child: const Text(
-                "bak",
-              ),
-            ),
+
             const MyText(text: "Tüm Ürünleri Keşfet"),
             //ürünler
             products.isEmpty && productFetcher.isLoading

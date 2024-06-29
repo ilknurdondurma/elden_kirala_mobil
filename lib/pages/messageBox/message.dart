@@ -51,7 +51,12 @@ class _MessageBoxState extends State<MessageBox> {
           messageList.isEmpty && messageFetcher.isLoading // Waiting for data from API
               ? IndicatorProgressBar()
               : messageList.isEmpty // No products found
-              ? Center(child: MyText(text: "Ürün bulunamadı"),)
+              ? Center(child: Column(
+                children: [
+                  Text("Sohbet Bulunamadı",style: TextStyle(fontSize: MyFontSizes.fontSize_2(context)),),
+                  Text("Başlatmak için herhangi bir  ürüne tıkla ve satıcıya sor",),
+                ],
+              ),)
               : Expanded(
                   child: ListView.builder(
                     itemCount: messageList.length,
