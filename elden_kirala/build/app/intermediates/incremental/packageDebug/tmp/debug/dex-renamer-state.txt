@@ -1,4 +1,0 @@
-#Sat Mar 02 02:37:30 TRT 2024
-base.0=D\:\\ornekler\\elden_kirala\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
-path.0=classes.dex
-renamed.0=classes.dex
